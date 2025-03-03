@@ -1,0 +1,35 @@
+name: Update Supabase Types
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_ID: "voejpsvzfmbnlvutkgsb"
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Update Supabase types
+        run: |
+          npx supabase gen types typescript --project-id "$PROJECT_ID" > types/database.types.ts
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update supabase types'
+          title: 'chore: update supabase types'
+          body: 'Updates the Supabase TypeScript types based on the latest database schema.'
+          branch: 'chore/update-supabase-types'
+          base: 'main' 

@@ -1,0 +1,95 @@
+"use client"
+
+import type React from "react"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/custom-toast-provider"
+import { Loader2 } from "lucide-react"
+
+export function RegisterForm() {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const { toast } = useToast()
+
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault()
+    setIsLoading(true)
+
+    try {
+      // Here you would typically:
+      // 1. Validate the form data
+      // 2. Send a request to your registration API
+      // 3. Create the user account
+      // 4. Log the user in
+      // 5. Redirect to the dashboard
+
+      // Simulating an API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      toast({
+        title: "Success",
+        description: "Your account has been created.",
+      })
+
+      router.push("/dashboard")
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="name">Full Name</Label>
+          <Input
+            id="name"
+            placeholder="John Doe"
+            type="text"
+            autoCapitalize="words"
+            autoComplete="name"
+            autoCorrect="off"
+            disabled={isLoading}
+            required
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            placeholder="name@example.com"
+            type="email"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect="off"
+            disabled={isLoading}
+            required
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="password">Password</Label>
+          <Input id="password" type="password" autoComplete="new-password" disabled={isLoading} required />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="confirm-password">Confirm Password</Label>
+          <Input id="confirm-password" type="password" autoComplete="new-password" disabled={isLoading} required />
+        </div>
+      </div>
+      <Button className="w-full" type="submit" disabled={isLoading}>
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        Create Account
+      </Button>
+    </form>
+  )
+}
+
