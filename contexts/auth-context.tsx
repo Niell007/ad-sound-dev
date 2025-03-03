@@ -149,6 +149,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
       }
       
+      console.log('User signed in, navigating to dashboard')
+      // Navigate to dashboard
+      router.push('/dashboard')
+      
       return { success: true }
     } catch (error) {
       console.error('Sign in error:', error)
@@ -181,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
+      console.log('Signing out user...')
       await supabase.auth.signOut()
       
       // Clear local state
@@ -193,6 +198,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('supabase.auth.token')
       }
       
+      console.log('User signed out, redirecting to home page')
       // Navigate to home page
       router.push('/')
       

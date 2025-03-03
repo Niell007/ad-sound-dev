@@ -39,8 +39,13 @@ export async function middleware(request: NextRequest) {
     
     const { pathname } = request.nextUrl
     
+    // Debug logging
+    console.log(`Middleware running for path: ${pathname}`);
+    console.log(`Session exists: ${!!session}`);
+    
     // Check if the path is protected and user is not authenticated
     if (!session && isProtectedRoute(pathname)) {
+      console.log(`Redirecting unauthenticated user from ${pathname} to /auth/signin`);
       // Store the original URL to redirect back after login
       const redirectUrl = new URL('/auth/signin', request.url)
       redirectUrl.searchParams.set('redirectedFrom', pathname)
@@ -49,11 +54,13 @@ export async function middleware(request: NextRequest) {
     
     // Check if user is trying to access auth pages while already authenticated
     if (session && isAuthRoute(pathname)) {
+      console.log(`Redirecting authenticated user from ${pathname} to /dashboard`);
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     
     // Add user info to headers for server components
     if (session) {
+      console.log(`Setting user headers for ${session.user.email}`);
       res.headers.set('x-user-id', session.user.id)
       res.headers.set('x-user-email', session.user.email || '')
       res.headers.set('x-user-role', session.user.user_metadata?.role || 'user')
@@ -70,12 +77,16 @@ export async function middleware(request: NextRequest) {
 
 // Check if the path is a protected route
 function isProtectedRoute(pathname: string): boolean {
-  return protectedPaths.some(path => pathname === path || pathname.startsWith(`${path}/`))
+  const isProtected = protectedPaths.some(path => pathname === path || pathname.startsWith(`${path}/`));
+  console.log(`Path ${pathname} is protected: ${isProtected}`);
+  return isProtected;
 }
 
 // Check if the path is an auth route
 function isAuthRoute(pathname: string): boolean {
-  return authPaths.some(path => pathname === path || pathname.startsWith(`${path}/`))
+  const isAuth = authPaths.some(path => pathname === path || pathname.startsWith(`${path}/`));
+  console.log(`Path ${pathname} is auth route: ${isAuth}`);
+  return isAuth;
 }
 
 // Define which routes this middleware should run on
@@ -86,9 +97,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public (public files)
-     * - api (API routes)
+     * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|api).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
-} 
+}

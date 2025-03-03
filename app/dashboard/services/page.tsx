@@ -190,6 +190,7 @@ const formatCurrency = (amount: number): string => {
 export default function ServicesPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [services, setServices] = useState<ServiceWithAnalytics[]>([]);
   const [filteredServices, setFilteredServices] = useState<ServiceWithAnalytics[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -282,27 +283,20 @@ export default function ServicesPage() {
     setFilteredServices(result);
   }, [services, searchQuery, statusFilter, categoryFilter, sortBy]);
 
-  // Get unique categories for filter dropdown
-  const uniqueCategories = Array.from(
-    new Set(services.map((service) => service.category))
-  );
-
-  const handleStatusChange = async (serviceId: string, newStatus: string) => {
+  // Function to handle service status update
+  const handleStatusUpdate = async (id: string, status: string) => {
     try {
-      await ServiceService.updateStatus(serviceId, newStatus);
+      setIsUpdating(true);
+      await ServiceService.updateStatus(id, status);
       
-      // Update local state
-      setServices(prevServices => 
-        prevServices.map(service => 
-          service.id === serviceId 
-            ? { ...service, status: newStatus } 
-            : service
-        )
-      );
+      // Update the local state
+      setServices(services.map(service => 
+        service.id === id ? { ...service, status } : service
+      ));
       
       toast({
-        title: "Status Updated",
-        description: `Service status has been updated to ${newStatus}.`
+        title: "Status updated",
+        description: `Service status has been updated to ${status}`,
       });
     } catch (error) {
       console.error("Error updating service status:", error);
@@ -311,8 +305,15 @@ export default function ServicesPage() {
         description: "Failed to update service status. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsUpdating(false);
     }
   };
+
+  // Get unique categories for filter dropdown
+  const uniqueCategories = Array.from(
+    new Set(services.map((service) => service.category))
+  );
 
   return (
     <div className="space-y-6">
@@ -510,11 +511,11 @@ export default function ServicesPage() {
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 {service.status === "active" ? (
-                                  <DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(service.id, "inactive")}>
                                     Mark as Inactive
                                   </DropdownMenuItem>
                                 ) : (
-                                  <DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(service.id, "active")}>
                                     Mark as Active
                                   </DropdownMenuItem>
                                 )}
@@ -611,7 +612,7 @@ export default function ServicesPage() {
                   ))
                 ) : filteredServices.length === 0 ? (
                   <div className="col-span-full flex flex-col items-center justify-center py-8">
-                    <Music className="h-10 w-10 text-muted-foreground mb-2" />
+                    <Music className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
                     <p className="text-sm font-medium">No services found</p>
                     <p className="text-xs text-muted-foreground">
                       Try adjusting your search or filters
@@ -667,7 +668,7 @@ export default function ServicesPage() {
                           <Switch 
                             id={`active-${service.id}`} 
                             checked={service.status === "active"}
-                            onChange={() => handleStatusChange(
+                            onChange={() => handleStatusUpdate(
                               service.id, 
                               service.status === "active" ? "inactive" : "active"
                             )}

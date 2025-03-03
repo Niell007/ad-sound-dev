@@ -73,7 +73,7 @@ export default function DashboardPage() {
           totalBookings: bookings.length,
           activeClients: clients.filter(client => client.type === 'regular' || client.type === 'premium').length,
           revenue: totalRevenue,
-          avgSessionDuration: `${avgHours}.${remainingMinutes} hrs`
+          avgSessionDuration: `${avgHours}h ${remainingMinutes}m`
         })
       } catch (error) {
         console.error("Error fetching dashboard data:", error)
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                           <div>
                             <p className="text-sm font-medium">{service.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              {service.bookings} bookings
+                              {service.bookings} {service.bookings === 1 ? 'booking' : 'bookings'}
                             </p>
                           </div>
                         </div>
@@ -302,14 +302,52 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[200px] rounded-md border border-dashed flex items-center justify-center">
-                <div className="text-center">
-                  <Calendar className="mx-auto h-10 w-10 text-muted-foreground" />
-                  <p className="mt-2 text-sm font-medium">Calendar View</p>
-                  <p className="text-xs text-muted-foreground">
-                    View your full schedule in the bookings section
-                  </p>
-                </div>
+              <div className="h-[300px] rounded-md border">
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <Skeleton className="h-[250px] w-full" />
+                  </div>
+                ) : (
+                  <div className="p-4">
+                    {recentBookings.length > 0 ? (
+                      <div className="space-y-3">
+                        {recentBookings.slice(0, 3).map((booking) => (
+                          <div key={booking.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
+                            <div className="flex items-center gap-3">
+                              <div className={`rounded-full p-1 ${
+                                booking.status === "confirmed" ? "bg-green-100" : 
+                                booking.status === "pending" ? "bg-yellow-100" : "bg-red-100"
+                              }`}>
+                                {booking.status === "confirmed" ? (
+                                  <CheckCircle className="h-4 w-4 text-green-600" />
+                                ) : booking.status === "pending" ? (
+                                  <Clock className="h-4 w-4 text-yellow-600" />
+                                ) : (
+                                  <XCircle className="h-4 w-4 text-red-600" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium">{format(parseISO(booking.date), 'EEE, MMM d')}</p>
+                                <p className="text-xs text-muted-foreground">{booking.start_time} - {booking.end_time}</p>
+                              </div>
+                            </div>
+                            <div className="text-sm">{booking.client.name}</div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <div className="text-center">
+                          <Calendar className="mx-auto h-10 w-10 text-muted-foreground" />
+                          <p className="mt-2 text-sm font-medium">No upcoming bookings</p>
+                          <p className="text-xs text-muted-foreground">
+                            Schedule a new booking to see it here
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -407,4 +445,3 @@ function ServiceItemSkeleton() {
     </div>
   )
 }
-

@@ -35,6 +35,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/custom-toast-provider";
+import { useRouter } from "next/navigation";
 
 interface NavItem {
   title: string;
@@ -116,6 +117,17 @@ export default function DashboardLayout({
   const { user, signOut, isLoading } = useAuth();
   const { hasRole } = useRBACContext();
   const { toast } = useToast();
+  const router = useRouter();
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isLoading && !user) {
+      console.log('No authenticated user found in dashboard layout, redirecting to signin');
+      router.push('/auth/signin');
+    } else if (user) {
+      console.log('Authenticated user in dashboard layout:', user.email);
+    }
+  }, [user, isLoading, router]);
 
   // Filter navigation items based on user role
   const filteredNavItems = navItems.filter(item => 

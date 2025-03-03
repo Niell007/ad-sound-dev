@@ -312,7 +312,10 @@ export function Header() {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/dashboard" className="flex items-center">
+                      <Link href="/dashboard" className="flex items-center" onClick={(e) => {
+                        e.preventDefault();
+                        router.push('/dashboard');
+                      }}>
                         <User className="mr-2 h-4 w-4" />
                         Dashboard
                       </Link>
@@ -342,10 +345,10 @@ export function Header() {
               ) : (
                 <>
                   <Button variant="ghost" asChild className="hidden md:inline-flex">
-                    <Link href="/auth/login">Log in</Link>
+                    <Link href="/auth/signin">Log in</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/auth/register">Sign up</Link>
+                    <Link href="/auth/signup">Sign up</Link>
                   </Button>
                 </>
               )}
@@ -421,7 +424,11 @@ export function Header() {
                         <Link
                           href="/dashboard"
                           className="flex items-center text-lg font-semibold"
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push('/dashboard');
+                            setMobileMenuOpen(false);
+                          }}
                         >
                           <User className="mr-2 h-5 w-5" />
                           Dashboard
@@ -456,7 +463,7 @@ export function Header() {
                     ) : (
                       <>
                         <Link
-                          href="/auth/login"
+                          href="/auth/signin"
                           className="flex items-center text-lg font-semibold"
                           onClick={() => setMobileMenuOpen(false)}
                         >
@@ -464,7 +471,7 @@ export function Header() {
                           Log in
                         </Link>
                         <Link
-                          href="/auth/register"
+                          href="/auth/signup"
                           className="flex items-center text-lg font-semibold"
                           onClick={() => setMobileMenuOpen(false)}
                         >

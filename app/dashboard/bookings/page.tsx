@@ -50,6 +50,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function BookingsPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [bookings, setBookings] = useState<BookingWithDetails[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<BookingWithDetails[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -130,22 +131,20 @@ export default function BookingsPage() {
     setFilteredBookings(result);
   }, [bookings, searchQuery, statusFilter, sortBy]);
 
-  const handleStatusChange = async (bookingId: string, newStatus: string) => {
+  // Function to handle status update
+  const handleStatusUpdate = async (id: string, status: string) => {
     try {
-      await BookingService.updateStatus(bookingId, newStatus);
+      setIsUpdating(true);
+      await BookingService.updateStatus(id, status);
       
-      // Update local state
-      setBookings(prevBookings => 
-        prevBookings.map(booking => 
-          booking.id === bookingId 
-            ? { ...booking, status: newStatus } 
-            : booking
-        )
-      );
+      // Update the local state
+      setBookings(bookings.map(booking => 
+        booking.id === id ? { ...booking, status } : booking
+      ));
       
       toast({
-        title: "Status Updated",
-        description: `Booking status has been updated to ${newStatus}.`
+        title: "Status updated",
+        description: `Booking status has been updated to ${status}`,
       });
     } catch (error) {
       console.error("Error updating booking status:", error);
@@ -154,6 +153,8 @@ export default function BookingsPage() {
         description: "Failed to update booking status. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -329,25 +330,25 @@ export default function BookingsPage() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuLabel>Change Status</DropdownMenuLabel>
                                 {booking.status !== "confirmed" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(booking.id, "confirmed")}>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(booking.id, "confirmed")}>
                                     <CheckCircle className="mr-2 h-4 w-4 text-green-600" />
                                     Mark as Confirmed
                                   </DropdownMenuItem>
                                 )}
                                 {booking.status !== "pending" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(booking.id, "pending")}>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(booking.id, "pending")}>
                                     <Clock className="mr-2 h-4 w-4 text-yellow-600" />
                                     Mark as Pending
                                   </DropdownMenuItem>
                                 )}
                                 {booking.status !== "completed" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(booking.id, "completed")}>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(booking.id, "completed")}>
                                     <CheckCircle className="mr-2 h-4 w-4 text-blue-600" />
                                     Mark as Completed
                                   </DropdownMenuItem>
                                 )}
                                 {booking.status !== "cancelled" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(booking.id, "cancelled")}>
+                                  <DropdownMenuItem onClick={() => handleStatusUpdate(booking.id, "cancelled")}>
                                     <XCircle className="mr-2 h-4 w-4 text-red-600" />
                                     Mark as Cancelled
                                   </DropdownMenuItem>
@@ -396,4 +397,3 @@ export default function BookingsPage() {
     </div>
   );
 }
-

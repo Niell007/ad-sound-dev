@@ -152,5 +152,77 @@ export const PaymentService = {
     }
 
     return data.reduce((total, payment) => total + payment.amount, 0)
+  },
+  
+  /**
+   * Get monthly revenue data for the current year
+   */
+  async getMonthlyRevenueForYear(year: number): Promise<{ month: string; revenue: number }[]> {
+    const startDate = `${year}-01-01`;
+    const endDate = `${year}-12-31`;
+    
+    const { data, error } = await supabase
+      .from('payments')
+      .select('amount, created_at')
+      .eq('status', 'paid')
+      .gte('created_at', startDate)
+      .lte('created_at', endDate);
+      
+    if (error) {
+      console.error(`Error fetching monthly revenue for ${year}:`, error);
+      throw error;
+    }
+    
+    // Initialize monthly revenue data
+    const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
+      month: new Date(year, i, 1).toLocaleString('default', { month: 'short' }),
+      revenue: 0
+    }));
+    
+    // Aggregate revenue by month
+    data.forEach(payment => {
+      const paymentDate = new Date(payment.created_at);
+      const monthIndex = paymentDate.getMonth();
+      monthlyRevenue[monthIndex].revenue += payment.amount;
+    });
+    
+    return monthlyRevenue;
+  },
+  
+  /**
+   * Get payment statistics
+   */
+  async getPaymentStats(): Promise<{ total: number; paid: number; pending: number; failed: number }> {
+    const { data, error } = await supabase
+      .from('payments')
+      .select('status, amount');
+      
+    if (error) {
+      console.error('Error fetching payment statistics:', error);
+      throw error;
+    }
+    
+    const stats = {
+      total: data.length,
+      paid: 0,
+      pending: 0,
+      failed: 0
+    };
+    
+    data.forEach(payment => {
+      switch (payment.status) {
+        case 'paid':
+          stats.paid++;
+          break;
+        case 'pending':
+          stats.pending++;
+          break;
+        case 'failed':
+          stats.failed++;
+          break;
+      }
+    });
+    
+    return stats;
   }
-} 
+}

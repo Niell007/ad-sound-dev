@@ -89,7 +89,7 @@ export default function SignupPage() {
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
-        <Music className="mx-auto h-6 w-6" />
+        <Music className="mx-auto h-6 w-6" aria-hidden="true" />
         <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground">
           Enter your details below to create your account
@@ -152,8 +152,14 @@ export default function SignupPage() {
               )}
             />
             <Button className="w-full" type="submit" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                  Creating account...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </Form>
@@ -172,17 +178,17 @@ export default function SignupPage() {
         <div className="grid grid-cols-2 gap-4">
           <Button variant="outline" type="button" disabled={!!isOAuthLoading} onClick={() => handleOAuthSignIn('github')}>
             {isOAuthLoading === 'github' ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
             ) : (
-              <Github className="mr-2 h-4 w-4" />
+              <Github className="mr-2 h-4 w-4" aria-hidden="true" />
             )}
             GitHub
           </Button>
           <Button variant="outline" type="button" disabled={!!isOAuthLoading} onClick={() => handleOAuthSignIn('google')}>
             {isOAuthLoading === 'google' ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
             ) : (
-              <Mail className="mr-2 h-4 w-4" />
+              <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
             )}
             Google
           </Button>
@@ -197,4 +203,4 @@ export default function SignupPage() {
       </p>
     </div>
   )
-} 
+}
