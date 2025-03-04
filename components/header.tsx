@@ -1,17 +1,14 @@
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import type { User } from '@/types'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Icons } from '@/components/icons'
-import { useSearch } from '@/hooks/use-search'
 import { ImageWithFallback } from '@/components/ui/image-with-fallback'
-import { AvatarFallback } from '@/components/ui/avatar-fallback'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -30,11 +27,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu"
-import { cn } from '@/lib/utils'
 import { 
   Phone, 
   Mail, 
-  Search, 
   Menu, 
   X, 
   User as UserIcon, 
@@ -129,61 +124,6 @@ export function Header() {
     return user !== null
   }
 
-  // Use the custom search hook
-  const searchableItems = useMemo(() => [
-    ...services.map(service => ({
-      title: service.title,
-      description: service.description,
-      href: service.href,
-      icon: service.icon,
-      searchTerms: [...service.subItems.map(item => item.title)]
-    })),
-    ...mainNavItems.map(item => ({
-      title: item.name,
-      href: item.href,
-      icon: item.icon
-    })),
-    ...(user ? [
-      { title: 'Dashboard', href: '/dashboard', icon: UserIcon },
-      { title: 'My Bookings', href: '/bookings', icon: Calendar },
-      { title: 'Settings', href: '/settings', icon: Settings }
-    ] : [])
-  ], [user])
-
-  const {
-    isOpen: searchOpen,
-    setIsOpen: setSearchOpen,
-    query: searchQuery,
-    setQuery: setSearchQuery,
-    results: searchResults,
-    onSelect: handleSearchSelect,
-    isLoading: searchLoading,
-    error: searchError,
-    recentSearches
-  } = useSearch(searchableItems)
-
-  // Handle keyboard shortcut for search
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setSearchOpen(true)
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [setSearchOpen])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearchOpen(true)
-  }
-
-  // Function to handle navigation
-  const handleNavigation = (href: string) => {
-    router.push(href)
-  }
-
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -231,7 +171,7 @@ export function Header() {
                                     onClick={(e) => {
                                       e.preventDefault()
                                       e.stopPropagation()
-                                      handleNavigation(item.href)
+                                      router.push(item.href)
                                     }}
                                   >
                                     {item.title}
@@ -261,18 +201,6 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              className="px-2"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-              <kbd className="pointer-events-none ml-2 hidden select-none rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:inline-block">
-                ⌘K
-              </kbd>
-            </Button>
-
             <div className="hidden md:flex items-center gap-4">
               <Button variant="ghost" size="sm" className="gap-2">
                 <Phone className="h-4 w-4" />
@@ -284,7 +212,7 @@ export function Header() {
               </Button>
             </div>
 
-            {/* User Menu with Recent Bookings */}
+            {/* User Menu */}
             <div className="flex items-center gap-2">
               {hasUserData(user) ? (
                 <DropdownMenu>
@@ -390,48 +318,6 @@ export function Header() {
           </div>
         )}
       </header>
-
-      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-        <CommandInput
-          placeholder="Search services and pages..."
-          value={searchQuery}
-          onValueChange={setSearchQuery}
-        />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {searchResults.length > 0 && (
-            <CommandGroup heading="Search Results">
-              {searchResults.map((result) => (
-                <CommandItem
-                  key={result.href}
-                  value={result.title}
-                  onSelect={() => handleSearchSelect(result)}
-                >
-                  {result.icon && <result.icon className="mr-2 h-4 w-4" />}
-                  <span>{result.title}</span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
-          {recentSearches.length > 0 && (
-            <>
-              <CommandSeparator />
-              <CommandGroup heading="Recent Searches">
-                {recentSearches.map((item) => (
-                  <CommandItem
-                    key={item.href}
-                    value={item.title}
-                    onSelect={() => handleSearchSelect(item)}
-                  >
-                    {item.icon && <item.icon className="mr-2 h-4 w-4" />}
-                    <span>{item.title}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </>
-          )}
-        </CommandList>
-      </CommandDialog>
     </>
   )
 }
