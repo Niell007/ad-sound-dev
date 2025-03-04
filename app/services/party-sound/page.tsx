@@ -3,10 +3,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Music, Check, Volume2, Lightbulb, Clock, Users } from "lucide-react"
+import { Music, Check, Volume2, Lightbulb, Clock, Users, Calendar, Camera } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ImageWithFallback } from "@/components/ui/image-with-fallback"
+import React from "react"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 const features = [
   {
@@ -85,36 +87,44 @@ const gallery = [
     src: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7",
     alt: "Party event setup with professional lighting",
     priority: true,
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    aspectRatio: 4/3,
+    date: "2023-12-15",
+    camera: "Sony A7III",
+    location: "Main Hall"
   },
   {
     src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
-    alt: "DJ performing at a live event",
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    alt: "DJ performing at a live event"
   },
   {
     src: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec",
-    alt: "Concert crowd enjoying music",
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    alt: "Concert crowd enjoying music"
   },
   {
     src: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745",
-    alt: "Professional sound equipment setup",
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    alt: "Professional sound equipment setup"
   },
   {
     src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
-    alt: "Concert lighting effects",
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    alt: "Concert lighting effects"
   },
   {
     src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622",
-    alt: "Live music performance",
-    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+    alt: "Live music performance"
   }
 ]
 
 export default function PartySoundPage() {
+  const [selectedImage, setSelectedImage] = React.useState<(typeof gallery)[0] | null>(null);
+  const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
+  const [isImageLoaded, setIsImageLoaded] = React.useState(false);
+
+  const handleImageClick = (image: typeof gallery[0]) => {
+    setSelectedImage(image);
+    setIsLightboxOpen(true);
+    setIsImageLoaded(false);
+  };
+
   return (
     <div className="container py-12 space-y-16">
       {/* Hero Section */}
@@ -124,9 +134,10 @@ export default function PartySoundPage() {
           alt="DJ mixing at a party"
           priority
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1536px) 95vw, 1536px"
+          sizes="100vw"
           className="object-cover"
           showLoadingState
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
           <div className="container">
@@ -212,28 +223,86 @@ export default function PartySoundPage() {
       {/* Gallery Section */}
       <section className="space-y-8">
         <h2 className="text-3xl font-bold text-center">Event Gallery</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
           {gallery.map((image, index) => (
             <motion.div
               key={index}
-              className="relative aspect-square rounded-lg overflow-hidden"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
+              className="relative break-inside-avoid-column rounded-lg overflow-hidden group cursor-pointer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              style={{ aspectRatio: image.aspectRatio || '1' }}
+              onClick={() => handleImageClick(image)}
             >
               <ImageWithFallback
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes={image.sizes}
-                className="object-cover hover:scale-105 transition-transform duration-300"
+                sizes="100vw"
+                className="object-cover transition-all duration-300 group-hover:scale-110"
                 showLoadingState
                 priority={image.priority}
-                enableZoom
+                unoptimized
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <p className="text-white text-sm font-medium truncate">
+                    {image.alt}
+                  </p>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Lightbox Dialog */}
+        <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+          <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden bg-background/95 backdrop-blur-sm">
+            {selectedImage && (
+              <div className="relative w-full h-full min-h-[50vh]">
+                <div className="absolute inset-0">
+                  <ImageWithFallback
+                    src={selectedImage.src}
+                    alt={selectedImage.alt}
+                    fill
+                    sizes="100vw"
+                    className="object-contain"
+                    onLoadingComplete={() => setIsImageLoaded(true)}
+                    unoptimized
+                  />
+                </div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isImageLoaded ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent"
+                >
+                  <h3 className="text-xl font-semibold text-white mb-2">{selectedImage.alt}</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-white/80">
+                    {selectedImage.date && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>{selectedImage.date}</span>
+                      </div>
+                    )}
+                    {selectedImage.camera && (
+                      <div className="flex items-center gap-2">
+                        <Camera className="h-4 w-4" />
+                        <span>{selectedImage.camera}</span>
+                      </div>
+                    )}
+                    {selectedImage.location && (
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{selectedImage.location}</span>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </section>
 
       {/* CTA Section */}
