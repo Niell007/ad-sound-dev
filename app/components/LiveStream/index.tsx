@@ -4,26 +4,10 @@ import React from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 
-export default function LiveRadioPage() {
-  const [error, setError] = React.useState<string | null>(null)
-
+export default function LiveStream() {
   return (
-    <div className="container py-8 space-y-6">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold">Live Radio</h1>
-        <p className="text-muted-foreground">
-          Listen to our live radio stream powered by Kick.com
-        </p>
-      </div>
-
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
+    <div className="w-full max-w-[1400px] mx-auto space-y-4">
       <div className="flex justify-end">
         <Button variant="outline" asChild>
           <a 
@@ -49,9 +33,6 @@ export default function LiveRadioPage() {
                 frameBorder="0"
                 scrolling="no"
                 allowFullScreen={true}
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                onError={() => setError("Failed to load stream player. Please try refreshing the page.")}
-                loading="lazy"
               />
             </div>
           </Card>
@@ -65,9 +46,6 @@ export default function LiveRadioPage() {
                 src="https://kick.com/soundmasterlive/chatroom"
                 className="absolute top-0 left-0 w-full h-full"
                 frameBorder="0"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                onError={() => setError("Failed to load chat. Please try refreshing the page.")}
-                loading="lazy"
               />
             </div>
           </Card>
