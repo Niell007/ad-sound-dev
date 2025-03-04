@@ -190,8 +190,12 @@ export function Header() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center space-x-2">
-              <Icons.logo className="h-6 w-6" />
-              <span className="hidden font-bold sm:inline-block">AD Sound</span>
+              <Icons.logo className="h-7 w-7 text-primary animate-pulse" />
+              <span className="hidden sm:inline-block">
+                <span className="font-bold text-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent tracking-tight hover:from-primary hover:to-primary transition-all duration-300">
+                  Soundmaster
+                </span>
+              </span>
             </Link>
 
             <NavigationMenu className="hidden md:flex">
@@ -276,7 +280,7 @@ export function Header() {
               </Button>
               <Button variant="ghost" size="sm" className="gap-2">
                 <Mail className="h-4 w-4" />
-                <span>contact@adsound.com</span>
+                <span>contact@soundmaster.co.za</span>
               </Button>
             </div>
 
@@ -287,7 +291,7 @@ export function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                       <ImageWithFallback
-                        src={user.image ?? '/avatars/default-avatar.png'}
+                        src={user.image ?? ''}
                         alt={`${user.name ?? 'User'}'s avatar`}
                         width={32}
                         height={32}

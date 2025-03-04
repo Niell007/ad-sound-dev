@@ -36,6 +36,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/custom-toast-provider";
 import { useRouter } from "next/navigation";
+import { Icons } from "@/components/icons";
 
 interface NavItem {
   title: string;
@@ -189,8 +190,10 @@ export default function DashboardLayout({
           <span className="sr-only">Toggle Menu</span>
         </Button>
         <div className="flex items-center gap-2">
-          <FileAudio className="h-6 w-6" />
-          <span className="font-semibold">AD Sound Studio</span>
+          <Icons.logo className="h-6 w-6 text-primary" />
+          <span className="font-semibold text-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent tracking-tight">
+            Soundmaster Studio
+          </span>
         </div>
       </div>
 
@@ -204,8 +207,8 @@ export default function DashboardLayout({
         <div className="flex h-full flex-col">
           {/* Sidebar Header */}
           <div className="flex h-16 items-center gap-2 border-b px-6">
-            <FileAudio className="h-6 w-6" />
-            <span className="font-semibold">AD Sound Studio</span>
+            <FileAudio className="h-6 w-6 text-primary" />
+            <span className="font-semibold text-lg tracking-tight">Soundmaster Studio</span>
           </div>
 
           {/* Sidebar Navigation */}

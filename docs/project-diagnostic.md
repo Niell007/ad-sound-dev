@@ -1,7 +1,7 @@
-# AD Sound Project Diagnostic
+# soundmaster Project Diagnostic
 
 ## Overview
-This document provides a diagnostic assessment of the AD Sound project, identifying completed features, pending tasks, and areas for improvement.
+This document provides a diagnostic assessment of the soundmaster project, identifying completed features, pending tasks, and areas for improvement.
 
 ## Completed Features
 

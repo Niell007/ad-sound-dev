@@ -1,6 +1,6 @@
 # Supabase Storage Integration
 
-This document provides instructions for setting up and using Supabase Storage for media management in the AD-Sound application.
+This document provides instructions for setting up and using Supabase Storage for media management in the soundmaster application.
 
 ## Overview
 

@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Customer Reviews | AD Sound',
+  title: 'Customer Reviews | soundmaster',
   description: 'Read what our customers have to say about our DJ services and share your own experience.',
 };
 

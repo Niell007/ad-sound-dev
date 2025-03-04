@@ -99,7 +99,7 @@ export default function LiveRadioPage() {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <p className="text-muted-foreground max-w-2xl">
             Experience high-quality music streaming with real-time updates.
-            Join our community on Kick.com for the ultimate live radio experience.
+            Join our community on Kick.com for the ultimate SoundMaster live radio experience.
           </p>
           <Button 
             variant="default" 

@@ -1,4 +1,4 @@
-# AD-Sound Platform
+# soundmaster Platform
 
 A full-featured audio streaming and booking platform built with Next.js and Supabase.
 

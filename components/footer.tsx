@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react"
 
 const socialLinks = [
-  { name: 'Facebook', href: 'https://facebook.com', icon: Facebook },
-  { name: 'Instagram', href: 'https://instagram.com', icon: Instagram },
-  { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-  { name: 'YouTube', href: 'https://youtube.com', icon: Youtube },
+  { name: 'Facebook', href: 'https://facebook.com/soundmasterza', icon: Facebook },
+  { name: 'Instagram', href: 'https://instagram.com/soundmaster.za', icon: Instagram },
+  { name: 'Twitter', href: 'https://twitter.com/soundmasterza', icon: Twitter },
+  { name: 'YouTube', href: 'https://youtube.com/@soundmasterza', icon: Youtube },
 ]
 
 export function Footer() {
@@ -19,8 +19,10 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <div className="flex items-center space-x-2">
-              <Icons.logo className="h-6 w-6" />
-              <span className="font-bold">AD Sound</span>
+              <Icons.logo className="h-7 w-7 text-primary" />
+              <span className="font-bold text-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent tracking-tight">
+                Soundmaster
+              </span>
             </div>
             <p className="text-sm text-muted-foreground">
               Professional sound and audio equipment rental in Tzaneen, Limpopo.
@@ -126,11 +128,11 @@ export function Footer() {
                   </li>
                   <li>
                     <Link 
-                      href="mailto:contact@adsound.com" 
+                      href="mailto:contact@soundmaster.co.za" 
                       className="flex items-center text-sm text-muted-foreground hover:text-foreground"
                     >
                       <Mail className="mr-2 h-4 w-4" />
-                      contact@adsound.com
+                      contact@soundmaster.co.za
                     </Link>
                   </li>
                   <li>
@@ -146,7 +148,7 @@ export function Footer() {
         </div>
         <div className="mt-8 border-t pt-8 flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} AD Sound. All rights reserved.
+            &copy; {new Date().getFullYear()} Soundmaster. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Designed with ❤️ in South Africa
