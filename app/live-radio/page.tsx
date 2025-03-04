@@ -20,7 +20,6 @@ export default function LiveRadioPage() {
   const [quality, setQuality] = useState("auto")
   const [isChatOpen, setIsChatOpen] = useState(true)
   const [isStreamLive, setIsStreamLive] = useState(false)
-  const [useFallbackChat, setUseFallbackChat] = useState(false)
   const [streamStats, setStreamStats] = useState({
     bitrate: 0,
     fps: 0,
@@ -61,48 +60,43 @@ export default function LiveRadioPage() {
   }, [])
 
   const handleStreamError = (error: Error) => {
-    console.error("Stream error:", error)
     toast({
       title: "Stream Error",
-      description: "There was an issue with the stream. Trying to reconnect...",
+      description: error.message,
       variant: "destructive"
     })
   }
 
   const handleStreamStart = () => {
-    console.log("Stream started")
+    setIsStreamLive(true)
     toast({
-      title: "Stream Connected",
-      description: "Successfully connected to the live stream",
-      variant: "default"
+      title: "Stream Started",
+      description: "The live stream has started successfully."
     })
   }
 
   const handleStreamEnd = () => {
-    console.log("Stream ended")
+    setIsStreamLive(false)
+    toast({
+      title: "Stream Ended",
+      description: "The live stream has ended."
+    })
   }
 
-  const handleQualityChange = (newQuality: string) => {
-    setQuality(newQuality)
+  const handleQualityChange = (value: string) => {
+    setQuality(value)
     toast({
       title: "Quality Changed",
-      description: `Stream quality set to ${newQuality}`,
-      variant: "default"
+      description: `Stream quality set to ${value}`
     })
   }
 
   const handleChatError = (error: Error) => {
-    console.error("Chat error:", error)
-    setUseFallbackChat(true)
     toast({
-      title: "Chat Connection Error",
-      description: "Switched to backup chat system",
-      variant: "default"
+      title: "Chat Error",
+      description: error.message,
+      variant: "destructive"
     })
-  }
-
-  const handleRetryPrimaryChat = () => {
-    setUseFallbackChat(false)
   }
 
   return (
@@ -110,7 +104,7 @@ export default function LiveRadioPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <CustomStreamPlayer
-            streamUrl="https://your-stream-url.com/stream"
+            streamUrl="https://stream.adsound.co.za/live/radio"
             onError={handleStreamError}
             onStreamStart={handleStreamStart}
             onStreamEnd={handleStreamEnd}
@@ -134,80 +128,47 @@ export default function LiveRadioPage() {
               </Select>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-3 bg-secondary rounded-lg">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <Activity className="w-4 h-4" />
-                  Bitrate
-                </div>
-                <div className="text-lg font-semibold">
-                  {streamStats.bitrate} kbps
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted">
+                <BarChart className="h-5 w-5 mb-2" />
+                <span className="text-sm font-medium">{streamStats.bitrate} kbps</span>
+                <span className="text-xs text-muted-foreground">Bitrate</span>
               </div>
               
-              <div className="p-3 bg-secondary rounded-lg">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <BarChart className="w-4 h-4" />
-                  FPS
-                </div>
-                <div className="text-lg font-semibold">
-                  {streamStats.fps}
-                </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted">
+                <Activity className="h-5 w-5 mb-2" />
+                <span className="text-sm font-medium">{streamStats.fps} FPS</span>
+                <span className="text-xs text-muted-foreground">Frame Rate</span>
               </div>
               
-              <div className="p-3 bg-secondary rounded-lg">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <MessageCircle className="w-4 h-4" />
-                  Viewers
-                </div>
-                <div className="text-lg font-semibold">
-                  {streamStats.viewers}
-                </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted">
+                <AlertCircle className="h-5 w-5 mb-2" />
+                <span className="text-sm font-medium">
+                  {streamStats.buffering ? "Yes" : "No"}
+                </span>
+                <span className="text-xs text-muted-foreground">Buffering</span>
               </div>
               
-              <div className="p-3 bg-secondary rounded-lg">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <Settings className="w-4 h-4" />
-                  Status
-                </div>
-                <div className="text-lg font-semibold">
-                  {streamStats.buffering ? "Buffering" : "Stable"}
-                </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted">
+                <MessageCircle className="h-5 w-5 mb-2" />
+                <span className="text-sm font-medium">{streamStats.viewers}</span>
+                <span className="text-xs text-muted-foreground">Viewers</span>
               </div>
             </div>
           </Card>
         </div>
-
+        
         <div className="lg:col-span-1">
-          <Card className="h-[600px] flex flex-col">
-            <div className="p-4 border-b flex items-center justify-between">
+          <Card className="h-full">
+            <div className="p-4 border-b">
               <h2 className="text-xl font-semibold">Live Chat</h2>
-              {useFallbackChat && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRetryPrimaryChat}
-                  className="gap-2"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  Retry Primary Chat
-                </Button>
-              )}
             </div>
-            
-            {useFallbackChat ? (
+            <div className="p-4">
               <CustomChat 
-                channelId="soundmaster-live"
-                onError={handleChatError} 
+                channelId="live-radio"
+                onError={handleChatError}
               />
-            ) : (
-              <iframe
-                src="https://kick.com/your-channel/chat"
-                className="flex-1 w-full"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                allow="autoplay; encrypted-media"
-              />
-            )}
+            </div>
           </Card>
         </div>
       </div>

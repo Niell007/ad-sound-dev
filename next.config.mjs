@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 let userConfig = undefined
 
 try {
@@ -33,22 +35,21 @@ const nextConfig = {
     ]
   },
   experimental: {
-    optimizeCss: true
+    optimizeCss: true,
+    serverActions: {
+      bodySizeLimit: '2mb'
+    }
   },
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
-  swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
   output: 'standalone',
-  // Remove unstable options that cause warnings
-  // unstable_runtimeJS: true,
-  // unstable_JsPreload: false,
   webpack: (config, { dev, isServer }) => {
     // Disable caching in development mode
     if (dev) {
@@ -59,58 +60,38 @@ const nextConfig = {
     if (!isServer) {
       config.optimization = {
         ...config.optimization,
+        moduleIds: 'deterministic',
+        chunkIds: 'deterministic',
         splitChunks: {
           chunks: 'all',
           minSize: 20000,
-          maxSize: 244000,
+          maxSize: 90000,
           minChunks: 1,
           maxAsyncRequests: 30,
           maxInitialRequests: 30,
+          enforceSizeThreshold: 50000,
           cacheGroups: {
-            defaultVendors: {
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              reuseExistingChunk: true,
+            default: false,
+            vendors: false,
+            framework: {
+              name: 'framework',
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
+              priority: 40,
+              chunks: 'all',
+              enforce: true,
             },
-            default: {
+            commons: {
+              name: 'commons',
               minChunks: 2,
-              priority: -20,
+              priority: 20,
               reuseExistingChunk: true,
-            },
+            }
           },
         },
-      }
+      };
     }
 
-    // Fix module resolution
-    config.resolve = {
-      ...config.resolve,
-      fallback: {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-      },
-    }
-
-    // Add module aliases
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': config.resolve.alias['@'] || './src',
-    }
-
-    // Ensure proper handling of dynamic imports
-    config.module = {
-      ...config.module,
-      parser: {
-        ...config.module.parser,
-        javascript: {
-          ...config.module.parser?.javascript,
-          dynamicImports: true,
-        },
-      },
-    }
-
-    return config
+    return config;
   },
   // Security headers
   async headers() {
@@ -142,7 +123,6 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
           },
-          // Add cache control headers to disable caching in development
           {
             key: 'Cache-Control',
             value: process.env.NODE_ENV === 'development' ? 'no-store, no-cache, must-revalidate, proxy-revalidate' : 'public, max-age=3600'

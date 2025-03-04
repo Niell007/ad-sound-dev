@@ -8,8 +8,8 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative">
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative h-[600px]">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20" />
+        <div className="relative h-[600px] sm:h-[700px]">
           <Image
             src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070"
             alt="DJ mixing at a party"
@@ -29,7 +29,7 @@ export default function HomePage() {
               <Button size="lg" asChild>
                 <Link href="/services">Our Services</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" asChild className="bg-white/10 backdrop-blur-sm hover:bg-white/20">
                 <Link href="/contact">Contact Us</Link>
               </Button>
             </div>
@@ -53,9 +53,11 @@ export default function HomePage() {
             {features.map((feature) => (
               <div
                 key={feature.title}
-                className="rounded-lg border bg-card p-8 text-card-foreground shadow-sm"
+                className="group rounded-lg border bg-card p-8 text-card-foreground transition-all duration-200 hover:shadow-lg"
               >
-                <feature.icon className="h-10 w-10 text-primary" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                  <feature.icon className="h-6 w-6" />
+                </div>
                 <h3 className="mt-4 text-xl font-semibold">{feature.title}</h3>
                 <p className="mt-2 text-muted-foreground">
                   {feature.description}
@@ -90,9 +92,18 @@ export default function HomePage() {
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0 p-8 flex flex-col justify-end text-white">
-                  <h3 className="text-2xl font-semibold">{service.title}</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0 p-8 flex flex-col justify-end">
+                  <h3 className="text-2xl font-semibold text-white">{service.title}</h3>
                   <p className="mt-2 text-white/90">{service.description}</p>
+                  <Button
+                    variant="outline"
+                    className="mt-4 w-fit bg-white/10 backdrop-blur-sm hover:bg-white/20"
+                    asChild
+                  >
+                    <Link href={`/services/${service.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                      Learn More
+                    </Link>
+                  </Button>
                 </div>
               </div>
             ))}
@@ -106,7 +117,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-background to-muted">
+      <section className="py-16 md:py-24">
         <div className="container">
           <div className="mx-auto max-w-[800px] text-center">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -149,7 +160,7 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="relative">
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20" />
         <div className="relative h-[400px]">
           <Image
             src="https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?q=80&w=2074"
@@ -256,43 +267,40 @@ const features = [
 
 const services = [
   {
-    title: 'Event Sound Systems',
-    description: 'Complete audio solutions for events of any size.',
+    title: 'Party Sound',
+    description: 'Professional sound systems and DJ services for any party or event.',
     image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070',
   },
   {
-    title: 'Live Music Production',
-    description: 'Professional sound for live performances and concerts.',
-    image: 'https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=2070',
+    title: 'Wedding Sound',
+    description: 'Complete audio solutions for your special day, from ceremony to reception.',
+    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069',
   },
   {
-    title: 'DJ Equipment Rental',
-    description: 'Top-quality DJ gear for your party or event.',
-    image: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?q=80&w=2070',
+    title: 'Corporate Events',
+    description: 'High-quality audio equipment for conferences, presentations, and business events.',
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012',
   },
 ]
 
 const testimonials = [
   {
-    content:
-      "Soundmaster transformed our wedding reception into an unforgettable celebration. The sound quality was impeccable, and their team's professionalism was outstanding.",
+    content: "The sound quality was exceptional, and the team was incredibly professional. They made our wedding day perfect!",
     name: "Sarah Johnson",
     title: "Wedding Client",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887",
   },
   {
-    content:
-      "As a venue owner, I've worked with many sound companies, but Soundmaster stands out. Their attention to detail and reliability make them our go-to choice for events.",
+    content: "Best sound equipment rental service in Tzaneen! They handled our corporate event flawlessly.",
     name: "Michael Chen",
-    title: "Venue Owner",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1770&auto=format&fit=crop",
+    title: "Business Owner",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1770",
   },
   {
-    content:
-      "The team at Soundmaster went above and beyond for our corporate event. Their expertise and state-of-the-art equipment delivered an exceptional experience.",
-    name: "Emily Rodriguez",
-    title: "Event Coordinator",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
+    content: "Professional, reliable, and amazing sound quality. Highly recommend for any event!",
+    name: "Emily Brown",
+    title: "Event Planner",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770",
   },
 ]
 

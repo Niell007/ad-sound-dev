@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { Music, Check, Volume2, Lightbulb, Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ImageWithFallback } from "@/components/ui/image-with-fallback"
 
 const features = [
   {
@@ -81,10 +81,37 @@ const packages = [
 ]
 
 const gallery = [
-  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000",
+  {
+    src: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7",
+    alt: "Party event setup with professional lighting",
+    priority: true,
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+    alt: "DJ performing at a live event",
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec",
+    alt: "Concert crowd enjoying music",
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745",
+    alt: "Professional sound equipment setup",
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
+    alt: "Concert lighting effects",
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622",
+    alt: "Live music performance",
+    sizes: "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+  }
 ]
 
 export default function PartySoundPage() {
@@ -92,11 +119,14 @@ export default function PartySoundPage() {
     <div className="container py-12 space-y-16">
       {/* Hero Section */}
       <section className="relative h-[500px] rounded-3xl overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1000"
-          alt="Party Sound System"
+        <ImageWithFallback
+          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3"
+          alt="DJ mixing at a party"
+          priority
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1536px) 95vw, 1536px"
           className="object-cover"
+          showLoadingState
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
           <div className="container">
@@ -132,29 +162,20 @@ export default function PartySoundPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="flex flex-col items-center text-center p-6 rounded-xl bg-card"
           >
-            <Card className="h-full card-hover">
-              <CardContent className="pt-6">
-                <div className="rounded-full w-12 h-12 flex items-center justify-center bg-primary/10 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              {feature.icon}
+            </div>
+            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+            <p className="text-muted-foreground">{feature.description}</p>
           </motion.div>
         ))}
       </section>
 
       {/* Packages Section */}
       <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Choose Your Package</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We offer flexible packages to suit events of any size. All packages include setup,
-            operation, and teardown services.
-          </p>
-        </div>
+        <h2 className="text-3xl font-bold text-center">Our Packages</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {packages.map((pkg, index) => (
             <motion.div
@@ -200,11 +221,15 @@ export default function PartySoundPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
             >
-              <Image
-                src={image}
-                alt={`Event ${index + 1}`}
+              <ImageWithFallback
+                src={image.src}
+                alt={image.alt}
                 fill
-                className="object-cover image-zoom"
+                sizes={image.sizes}
+                className="object-cover hover:scale-105 transition-transform duration-300"
+                showLoadingState
+                priority={image.priority}
+                enableZoom
               />
             </motion.div>
           ))}

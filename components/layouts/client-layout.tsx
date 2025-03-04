@@ -33,14 +33,14 @@ export default function ClientLayout({
   children: React.ReactNode
 }) {
   return (
-    <CustomToastProvider>
-      <AuthProvider>
-        <RBACProvider>
-          <Providers>
-            <ErrorBoundary
-              FallbackComponent={ErrorFallback}
-              onReset={() => window.location.reload()}
-            >
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => window.location.reload()}
+    >
+      <CustomToastProvider>
+        <AuthProvider>
+          <RBACProvider>
+            <Providers>
               <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
@@ -48,10 +48,10 @@ export default function ClientLayout({
                 </main>
                 <Footer />
               </div>
-            </ErrorBoundary>
-          </Providers>
-        </RBACProvider>
-      </AuthProvider>
-    </CustomToastProvider>
+            </Providers>
+          </RBACProvider>
+        </AuthProvider>
+      </CustomToastProvider>
+    </ErrorBoundary>
   )
 } 

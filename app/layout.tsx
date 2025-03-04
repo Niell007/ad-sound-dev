@@ -1,5 +1,4 @@
 import { Metadata } from "next"
-import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import ClientLayout from "@/components/layouts/client-layout"
 
@@ -18,7 +17,6 @@ export default function RootLayout({
       <body className="font-sans">
         <ClientLayout>
           {children}
-          <Toaster />
         </ClientLayout>
       </body>
     </html>

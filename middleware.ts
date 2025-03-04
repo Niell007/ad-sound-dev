@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -31,8 +31,22 @@ export async function middleware(request: NextRequest) {
     // Create a response object that we'll modify and return
     const res = NextResponse.next()
     
-    // Create a Supabase client
-    const supabase = createMiddlewareClient({ req: request, res })
+    // Create a Supabase client using the new ssr package
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get: (name) => request.cookies.get(name)?.value,
+          set: (name, value, options) => {
+            res.cookies.set({ name, value, ...options })
+          },
+          remove: (name, options) => {
+            res.cookies.set({ name, value: '', ...options })
+          },
+        },
+      }
+    )
     
     // Refresh the session if it exists
     const { data: { session } } = await supabase.auth.getSession()
