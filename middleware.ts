@@ -1,3 +1,4 @@
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -8,28 +9,42 @@ const protectedRoutes: string[] = [
   // '/dashboard',
 ]
 
-export function middleware(request: NextRequest) {
-  // Get the pathname of the request
-  const path = request.nextUrl.pathname
+export async function middleware(request: NextRequest) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req: request, res })
+  const { pathname } = request.nextUrl
 
-  // Check if the current path is protected
-  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
-
-  // If it's not a protected route, continue as normal
-  if (!isProtectedRoute) {
-    return NextResponse.next()
+  // Handle auth redirects
+  if (pathname === '/auth/login' || pathname === '/auth/register') {
+    const newPath = pathname === '/auth/login' ? '/auth/signin' : '/auth/signup'
+    return NextResponse.redirect(new URL(newPath, request.url))
   }
 
-  // Add your authentication logic here for protected routes
-  // For example, check for session token
-  const token = request.cookies.get('session')?.value
+  // Check auth session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  // If no token and trying to access protected route, redirect to login
-  if (!token && isProtectedRoute) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Log session state for debugging
+  console.log('Middleware running for path:', pathname)
+  console.log('Session exists:', !!session)
+
+  // Define protected routes
+  const isProtectedRoute = pathname.startsWith('/dashboard') || 
+                          pathname.startsWith('/admin') || 
+                          pathname.startsWith('/settings')
+
+  console.log('Path', pathname, 'is protected:', isProtectedRoute)
+
+  // Handle protected routes
+  if (isProtectedRoute && !session) {
+    // Store the attempted URL to redirect back after login
+    const redirectUrl = new URL('/auth/signin', request.url)
+    redirectUrl.searchParams.set('redirectedFrom', pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  return NextResponse.next()
+  return res
 }
 
 // Configure which routes use this middleware
