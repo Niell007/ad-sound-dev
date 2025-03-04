@@ -12,6 +12,10 @@ import { Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
+
+// Default avatar as base64 to avoid 404s
+const defaultAvatar = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSIyMCIgZmlsbD0iI2YxZjVmOSIvPjxwYXRoIGQ9Ik0yMCAxOGE2IDYgMCAxIDAtNi02IDYgNiAwIDAgMCA2IDZ6bTAgNGMtNC4wMiAwLTEyIDIuMDItMTIgNnY0aDI0di00YzAtMy45OC03Ljk4LTYtMTItNnoiIGZpbGw9IiM5NGEzYjgiLz48L3N2Zz4="
 
 export default function LiveRadioPage() {
   const [error, setError] = React.useState<string | null>(null)
@@ -75,6 +79,21 @@ export default function LiveRadioPage() {
               ON AIR
             </Badge>
           )}
+          
+          {/* Host Avatar */}
+          <div className="ml-auto flex items-center gap-2">
+            <div className="relative w-8 h-8 rounded-full overflow-hidden">
+              <Image
+                src={defaultAvatar}
+                alt="Host Avatar"
+                width={32}
+                height={32}
+                className="object-cover"
+                priority
+              />
+            </div>
+            <span className="text-sm font-medium">SoundMaster</span>
+          </div>
         </motion.div>
 
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -139,7 +158,7 @@ export default function LiveRadioPage() {
           transition={{ delay: 0.3 }}
         >
           <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-card to-card/95 border-rose-500/10">
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            <div className="relative w-full aspect-video">
               {streamLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
                   <div className="flex flex-col items-center gap-4">
@@ -149,6 +168,7 @@ export default function LiveRadioPage() {
                 </div>
               )}
               <iframe
+                title="Live Radio Stream"
                 key={`stream-${retryKey}`}
                 src="https://player.kick.com/soundmasterlive"
                 className="absolute top-0 left-0 w-full h-full"
@@ -162,7 +182,7 @@ export default function LiveRadioPage() {
                   setStreamLoading(false)
                   setIsStreamOnline(false)
                 }}
-                loading="lazy"
+                loading="eager"
               />
             </div>
             <div className="p-4 flex items-center justify-between bg-card/50 backdrop-blur-sm border-t border-rose-500/10">

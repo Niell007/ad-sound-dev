@@ -26,13 +26,15 @@ export default function LiveStream() {
         {/* Stream Player */}
         <div className="lg:col-span-3">
           <Card className="overflow-hidden">
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            <div className="relative w-full aspect-video">
               <iframe
+                title="Live Stream Player"
                 src="https://player.kick.com/soundmasterlive"
                 className="absolute top-0 left-0 w-full h-full"
                 frameBorder="0"
                 scrolling="no"
                 allowFullScreen={true}
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"
               />
             </div>
           </Card>
@@ -43,9 +45,11 @@ export default function LiveStream() {
           <Card className="h-full">
             <div className="relative w-full h-[600px]">
               <iframe
+                title="Live Stream Chat"
                 src="https://kick.com/soundmasterlive/chatroom"
                 className="absolute top-0 left-0 w-full h-full"
                 frameBorder="0"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
               />
             </div>
           </Card>
