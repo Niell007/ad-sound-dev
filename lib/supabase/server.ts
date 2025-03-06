@@ -1,44 +1,34 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { Database } from './types'
+import { type NextRequest, NextResponse } from 'next/server'
 
-export function createServerSupabaseClient() {
-  const cookieStore = cookies()
-
-  return createServerClient<Database>(
+export function createClient() {
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        async get(name: string) {
+          return (await cookies()).get(name)?.value
         },
-        set(name: string, value: string, options: any) {
-          try {
-            cookieStore.set({ name, value, ...options })
-          } catch (error) {
-            // Handle cookie errors
-          }
+        async set(name: string, value: string, options: { [key: string]: any }) {
+          (await cookies()).set(name, value, options)
         },
-        remove(name: string, options: any) {
-          try {
-            cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
-            // Handle cookie errors
-          }
-        },
-      },
+        async remove(name: string, options: { [key: string]: any }) {
+          (await cookies()).set(name, '', { ...options, maxAge: 0 })
+        }
+      }
     }
   )
 }
 
 // Helper function to get authenticated user from server component
 export async function getAuthenticatedUser() {
-  const supabase = createServerSupabaseClient()
+  const supabase = createClient()
   try {
-    const { data: { session }, error } = await supabase.auth.getSession()
+    const { data: { user }, error } = await supabase.auth.getUser()
     if (error) throw error
-    return session?.user || null
+    return user
   } catch (error) {
     console.error('Error getting authenticated user:', error)
     return null
@@ -47,7 +37,7 @@ export async function getAuthenticatedUser() {
 
 // Helper function to get user profile from server component
 export async function getServerSideProfile(userId: string) {
-  const supabase = createServerSupabaseClient()
+  const supabase = createClient()
   try {
     const { data, error } = await supabase
       .from('profiles')
@@ -65,7 +55,7 @@ export async function getServerSideProfile(userId: string) {
 
 // Helper function to check if user is admin from server component
 export async function isAdminServerSide(userId: string) {
-  const supabase = createServerSupabaseClient()
+  const supabase = createClient()
   try {
     const { data, error } = await supabase
       .from('profiles')
@@ -79,4 +69,46 @@ export async function isAdminServerSide(userId: string) {
     console.error('Error checking admin status:', error)
     return false
   }
+}
+
+// Helper function to handle auth state change in middleware
+export async function updateAuthState(request: NextRequest) {
+  const response = NextResponse.next()
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          const cookie = request.cookies.get(name)
+          return cookie?.value
+        },
+        set(name: string, value: string, options: { [key: string]: any }) {
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+            sameSite: 'lax' as const,
+            httpOnly: true
+          })
+        },
+        remove(name: string, options: { [key: string]: any }) {
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+            maxAge: 0,
+            sameSite: 'lax' as const,
+            httpOnly: true
+          })
+        }
+      }
+    }
+  )
+
+  // Refresh session if exists
+  const { data: { session }, error } = await supabase.auth.getSession()
+
+  return { supabase, session, error, response }
 } 

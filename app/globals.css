@@ -47,12 +47,11 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
   }
-}
 
-@layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -73,23 +72,35 @@
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+@layer components {
+  .prose {
+    @apply prose-headings:text-foreground 
+           prose-p:text-muted-foreground 
+           prose-a:text-primary
+           prose-strong:text-foreground 
+           prose-ul:text-muted-foreground 
+           prose-ol:text-muted-foreground
+           prose-blockquote:text-muted-foreground 
+           prose-hr:border-border 
+           prose-code:text-foreground;
   }
 }
 
 /* Custom animations */
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .animate-float {
@@ -152,9 +163,13 @@
 
 /* Prose styles for blog content */
 .prose {
-  @apply prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary 
-         prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground 
-         prose-blockquote:text-muted-foreground prose-hr:border-border prose-code:text-foreground 
-         prose-pre:bg-muted prose-th:text-foreground prose-td:text-muted-foreground;
+  @apply prose-headings:text-foreground 
+         prose-p:text-muted-foreground 
+         prose-a:text-primary
+         prose-strong:text-foreground 
+         prose-ul:text-muted-foreground 
+         prose-ol:text-muted-foreground
+         prose-blockquote:text-muted-foreground 
+         prose-hr:border-border 
+         prose-code:text-foreground;
 }
-

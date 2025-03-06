@@ -3,12 +3,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Music, Check, Volume2, Lightbulb, Clock, Users, Calendar, Camera } from "lucide-react"
+import { Music, Check, Volume2, Lightbulb, Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ImageWithFallback } from "@/components/ui/image-with-fallback"
-import React from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const features = [
   {
@@ -83,61 +81,22 @@ const packages = [
 ]
 
 const gallery = [
-  {
-    src: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7",
-    alt: "Party event setup with professional lighting",
-    priority: true,
-    aspectRatio: 4/3,
-    date: "2023-12-15",
-    camera: "Sony A7III",
-    location: "Main Hall"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
-    alt: "DJ performing at a live event"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec",
-    alt: "Concert crowd enjoying music"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745",
-    alt: "Professional sound equipment setup"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
-    alt: "Concert lighting effects"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622",
-    alt: "Live music performance"
-  }
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1000",
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000",
+  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&q=80&w=1000",
+  "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000",
 ]
 
 export default function PartySoundPage() {
-  const [selectedImage, setSelectedImage] = React.useState<(typeof gallery)[0] | null>(null);
-  const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
-  const [isImageLoaded, setIsImageLoaded] = React.useState(false);
-
-  const handleImageClick = (image: typeof gallery[0]) => {
-    setSelectedImage(image);
-    setIsLightboxOpen(true);
-    setIsImageLoaded(false);
-  };
-
   return (
     <div className="container py-12 space-y-16">
       {/* Hero Section */}
       <section className="relative h-[500px] rounded-3xl overflow-hidden">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3"
-          alt="DJ mixing at a party"
-          priority
+        <Image
+          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1000"
+          alt="Party Sound System"
           fill
-          sizes="100vw"
           className="object-cover"
-          showLoadingState
-          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
           <div className="container">
@@ -173,20 +132,29 @@ export default function PartySoundPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="flex flex-col items-center text-center p-6 rounded-xl bg-card"
           >
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-              {feature.icon}
-            </div>
-            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p className="text-muted-foreground">{feature.description}</p>
+            <Card className="h-full card-hover">
+              <CardContent className="pt-6">
+                <div className="rounded-full w-12 h-12 flex items-center justify-center bg-primary/10 mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
+              </CardContent>
+            </Card>
           </motion.div>
         ))}
       </section>
 
       {/* Packages Section */}
       <section className="space-y-8">
-        <h2 className="text-3xl font-bold text-center">Our Packages</h2>
+        <div className="text-center">
+          <h2 className="text-3xl font-bold mb-4">Choose Your Package</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            We offer flexible packages to suit events of any size. All packages include setup,
+            operation, and teardown services.
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {packages.map((pkg, index) => (
             <motion.div
@@ -223,86 +191,24 @@ export default function PartySoundPage() {
       {/* Gallery Section */}
       <section className="space-y-8">
         <h2 className="text-3xl font-bold text-center">Event Gallery</h2>
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {gallery.map((image, index) => (
             <motion.div
               key={index}
-              className="relative break-inside-avoid-column rounded-lg overflow-hidden group cursor-pointer"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              style={{ aspectRatio: image.aspectRatio || '1' }}
-              onClick={() => handleImageClick(image)}
+              className="relative aspect-square rounded-lg overflow-hidden"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
             >
-              <ImageWithFallback
-                src={image.src}
-                alt={image.alt}
+              <Image
+                src={image}
+                alt={`Event ${index + 1}`}
                 fill
-                sizes="100vw"
-                className="object-cover transition-all duration-300 group-hover:scale-110"
-                showLoadingState
-                priority={image.priority}
-                unoptimized
+                className="object-cover image-zoom"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-white text-sm font-medium truncate">
-                    {image.alt}
-                  </p>
-                </div>
-              </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Lightbox Dialog */}
-        <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-          <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden bg-background/95 backdrop-blur-sm">
-            {selectedImage && (
-              <div className="relative w-full h-full min-h-[50vh]">
-                <div className="absolute inset-0">
-                  <ImageWithFallback
-                    src={selectedImage.src}
-                    alt={selectedImage.alt}
-                    fill
-                    sizes="100vw"
-                    className="object-contain"
-                    onLoadingComplete={() => setIsImageLoaded(true)}
-                    unoptimized
-                  />
-                </div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: isImageLoaded ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent"
-                >
-                  <h3 className="text-xl font-semibold text-white mb-2">{selectedImage.alt}</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-white/80">
-                    {selectedImage.date && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>{selectedImage.date}</span>
-                      </div>
-                    )}
-                    {selectedImage.camera && (
-                      <div className="flex items-center gap-2">
-                        <Camera className="h-4 w-4" />
-                        <span>{selectedImage.camera}</span>
-                      </div>
-                    )}
-                    {selectedImage.location && (
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4" />
-                        <span>{selectedImage.location}</span>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
       </section>
 
       {/* CTA Section */}

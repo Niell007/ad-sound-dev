@@ -1,30 +1,58 @@
 "use client"
 
 import * as React from "react"
-import * as SwitchPrimitives from "@radix-ui/react-switch"
-
 import { cn } from "@/lib/utils"
 
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->(({ className, ...props }, ref) => (
-  <SwitchPrimitives.Root
-    className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
-      className,
-    )}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
-      )}
-    />
-  </SwitchPrimitives.Root>
-))
-Switch.displayName = SwitchPrimitives.Root.displayName
+interface SwitchProps extends React.HTMLAttributes<HTMLDivElement> {
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  disabled?: boolean
+}
+
+const Switch = React.forwardRef<HTMLDivElement, SwitchProps>(
+  ({ className, checked = false, onCheckedChange, disabled = false, ...props }, ref) => {
+    const [isChecked, setIsChecked] = React.useState(checked)
+
+    React.useEffect(() => {
+      setIsChecked(checked)
+    }, [checked])
+
+    const handleToggle = () => {
+      if (disabled) return
+      const newValue = !isChecked
+      setIsChecked(newValue)
+      onCheckedChange?.(newValue)
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors",
+          isChecked ? "bg-primary" : "bg-input",
+          disabled && "cursor-not-allowed opacity-50",
+          className
+        )}
+        onClick={handleToggle}
+        data-state={isChecked ? "checked" : "unchecked"}
+        role="switch"
+        aria-checked={isChecked}
+        tabIndex={disabled ? -1 : 0}
+        {...props}
+      >
+        <span
+          className={cn(
+            "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform",
+            isChecked ? "translate-x-5" : "translate-x-0.5"
+          )}
+          data-state={isChecked ? "checked" : "unchecked"}
+        />
+      </div>
+    )
+  }
+)
+
+Switch.displayName = "Switch"
 
 export { Switch }
 

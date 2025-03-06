@@ -1,21 +1,28 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "next build",
+  "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["fra1"],
+  "regions": ["iad1"],
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": true,
+      "dev": false,
+      "staging": true
     }
   },
   "github": {
     "silent": true,
-    "autoAlias": true
+    "autoAlias": true,
+    "enabled": true
   },
   "env": {
     "NEXT_PUBLIC_VERCEL_ENV": "production",
-    "NEXT_TELEMETRY_DISABLED": "1"
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://voejpsvzfmbnlvutkgsb.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvZWpwc3Z6Zm1ibmx2dXRrZ3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2ODkwOTUsImV4cCI6MjA1NjI2NTA5NX0.N3Lz5MAEzmkJuARusii6NJbCWxqIaUxfzNivFpB6jRk",
+    "SKIP_IMAGE_OPTIMIZATION": "true"
   },
   "headers": [
     {
@@ -24,6 +31,10 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         }
       ]
     },
@@ -41,8 +52,23 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
     }
   ]
 } 

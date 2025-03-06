@@ -1,32 +1,21 @@
-import { NextPageContext } from 'next'
-import { Button } from '@/components/ui/button'
-import { AlertTriangle } from 'lucide-react'
+import { Button } from "@/components/ui/button"
 
-interface ErrorProps {
-  statusCode?: number
-  message?: string
-}
-
-function Error({ statusCode, message }: ErrorProps) {
+function Error({ statusCode }) {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center space-y-6">
-        <AlertTriangle className="mx-auto h-16 w-16 text-yellow-500" />
-        <h1 className="text-4xl font-bold">
-          {statusCode ? `Error ${statusCode}` : 'An error occurred'}
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          {message || 'Sorry, something went wrong. Please try again later.'}
-        </p>
-        <Button onClick={() => window.location.reload()} variant="outline">
-          Try Again
-        </Button>
-      </div>
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">
+        {statusCode
+          ? `An error ${statusCode} occurred on server`
+          : 'An error occurred on client'}
+      </h1>
+      <Button asChild>
+        <a href="/">Return Home</a>
+      </Button>
     </div>
   )
 }
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
+Error.getInitialProps = ({ res, err }) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404
   return { statusCode }
 }

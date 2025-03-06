@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 
 /**
  * Utility functions for working with Supabase Storage
@@ -29,22 +29,22 @@ export async function uploadFile(
 ) {
   try {
     // Upload the file
-    const { data, error } = await supabase.storage
+    const { data, error } = await createClient().storage
       .from(bucket)
       .upload(path, file, {
         cacheControl: '3600',
         upsert: false,
       });
-      
+
     if (error) {
       throw error;
     }
-    
+
     // Get the public URL
-    const { data: publicUrlData } = supabase.storage
+    const { data: publicUrlData } = createClient().storage
       .from(bucket)
       .getPublicUrl(path);
-      
+
     return {
       data: {
         ...data,
@@ -69,14 +69,14 @@ export async function uploadFile(
  */
 export async function deleteFile(bucket: string, path: string) {
   try {
-    const { data, error } = await supabase.storage
+    const { data, error } = await createClient().storage
       .from(bucket)
       .remove([path]);
-      
+
     if (error) {
       throw error;
     }
-    
+
     return {
       data,
       error: null
@@ -98,14 +98,14 @@ export async function deleteFile(bucket: string, path: string) {
  */
 export async function listFiles(bucket: string, path?: string) {
   try {
-    const { data, error } = await supabase.storage
+    const { data, error } = await createClient().storage
       .from(bucket)
       .list(path || '');
-      
+
     if (error) {
       throw error;
     }
-    
+
     return {
       data,
       error: null
@@ -126,10 +126,10 @@ export async function listFiles(bucket: string, path?: string) {
  * @returns The public URL or error
  */
 export function getPublicUrl(bucket: string, path: string) {
-  const { data } = supabase.storage
+  const { data } = createClient().storage
     .from(bucket)
     .getPublicUrl(path);
-    
+
   return data.publicUrl;
 }
 
@@ -149,7 +149,7 @@ export async function uploadProfileImage(
   const fileExt = file.name.split('.').pop();
   const fileName = `${userId}.${fileExt}`;
   const filePath = `${userId}/${fileName}`;
-  
+
   return uploadFile(PROFILES_BUCKET, filePath, file, onProgress);
 }
 

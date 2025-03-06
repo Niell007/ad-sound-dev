@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { Music, Users, Calendar, Star, Award, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Music, Users, Calendar, Star, Award, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 const stats = [
   {
@@ -28,46 +29,52 @@ const stats = [
     label: "Average Rating",
     icon: Star,
   },
-]
+];
 
 const values = [
   {
     title: "Quality Equipment",
-    description: "We invest in top-tier audio equipment to deliver exceptional sound quality at every event.",
+    description:
+      "We invest in top-tier audio equipment to deliver exceptional sound quality at every event.",
     icon: Award,
   },
   {
     title: "Professional Service",
-    description: "Our experienced team ensures smooth execution and professional conduct throughout your event.",
+    description:
+      "Our experienced team ensures smooth execution and professional conduct throughout your event.",
     icon: Users,
   },
   {
     title: "Client Satisfaction",
-    description: "We go above and beyond to exceed client expectations and create memorable experiences.",
+    description:
+      "We go above and beyond to exceed client expectations and create memorable experiences.",
     icon: Heart,
   },
-]
+];
 
 const team = [
   {
     name: "John Smith",
     role: "Founder & Sound Engineer",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400",
     bio: "With over 15 years of experience in sound engineering, John founded Soundmaster to bring professional audio solutions to Tzaneen.",
   },
   {
     name: "Sarah Johnson",
     role: "Event Coordinator",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400",
     bio: "Sarah ensures every event runs smoothly, from initial consultation to final execution.",
   },
   {
     name: "Michael Ndlovu",
     role: "Technical Director",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
     bio: "Michael oversees our equipment maintenance and setup, ensuring optimal performance at every event.",
   },
-]
+];
 
 export default function AboutPage() {
   return (
@@ -75,10 +82,12 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative h-[500px] rounded-3xl overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=2000"
+          src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7"
           alt="Sound Equipment"
           fill
           className="object-cover"
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
           <div className="container">
@@ -88,10 +97,13 @@ export default function AboutPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-4xl font-bold gradient-text">About Soundmaster</h1>
+              <h1 className="text-4xl font-bold gradient-text">
+                About Soundmaster
+              </h1>
               <p className="text-xl text-muted-foreground">
-                Bringing professional sound solutions to Tzaneen and the greater Limpopo area since 2022.
-                Making your events unforgettable with premium audio experiences.
+                Bringing professional sound solutions to Tzaneen and the greater
+                Limpopo area since 2022. Making your events unforgettable with
+                premium audio experiences.
               </p>
             </motion.div>
           </div>
@@ -109,7 +121,9 @@ export default function AboutPage() {
           <Card key={stat.label} className="text-center glass card-hover">
             <CardContent className="pt-6">
               <stat.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-              <div className="text-3xl font-bold gradient-text">{stat.value}</div>
+              <div className="text-3xl font-bold gradient-text">
+                {stat.value}
+              </div>
               <p className="text-muted-foreground">{stat.label}</p>
             </CardContent>
           </Card>
@@ -126,9 +140,10 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto space-y-4">
           <h2 className="text-3xl font-bold">Our Mission</h2>
           <p className="text-muted-foreground">
-            To provide exceptional audio experiences that elevate events and create lasting memories.
-            We strive to deliver professional service, cutting-edge equipment, and unmatched expertise
-            to every client we serve.
+            To provide exceptional audio experiences that elevate events and
+            create lasting memories. We strive to deliver professional service,
+            cutting-edge equipment, and unmatched expertise to every client we
+            serve.
           </p>
         </div>
       </motion.section>
@@ -171,12 +186,13 @@ export default function AboutPage() {
             >
               <Card className="h-full card-hover overflow-hidden">
                 <div className="relative h-64">
-                  <Image
+                  <ImageWithFallback
                     src={member.image}
                     alt={member.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
+                    quality={90}
                   />
                 </div>
                 <CardContent className="pt-6">
@@ -199,8 +215,8 @@ export default function AboutPage() {
       >
         <h2 className="text-3xl font-bold">Ready to Work With Us?</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Let's create an unforgettable event together. Contact us to discuss your requirements
-          and get a personalized quote.
+          Let's create an unforgettable event together. Contact us to discuss
+          your requirements and get a personalized quote.
         </p>
         <div className="flex gap-4 justify-center">
           <Button size="lg" className="button-glow" asChild>
@@ -212,6 +228,5 @@ export default function AboutPage() {
         </div>
       </motion.section>
     </div>
-  )
+  );
 }
-

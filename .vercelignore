@@ -1,0 +1,8 @@
+.git
+node_modules
+.env
+.env.*
+.husky
+scripts
+scripts/optimize-images.ts
+*.log 

@@ -14,8 +14,20 @@ function Show-Menu {
     Write-Host "Q: Quit"
 }
 
-function Deploy-Vercel {
+function Start-Deployment {
     Write-Host "Deploying to Vercel..."
+    Remove-Item -Path "node_modules" -Recurse -Force
+    Remove-Item -Path ".next" -Recurse -Force
+    
+    # Clean npm cache
+    npm cache clean --force
+    
+    # Install dependencies
+    npm install
+    
+    # Build the application
+    npm run build
+    
     vercel --prod
 }
 
@@ -57,7 +69,7 @@ function Full-Troubleshooting {
 function Complete-Deployment {
     Write-Host "Running complete deployment setup..."
     Install-Dependencies
-    Deploy-Vercel
+    Start-Deployment
 }
 
 # Main menu loop
@@ -65,7 +77,7 @@ while ($true) {
     Show-Menu
     $selection = Read-Host "Please make a selection"
     switch ($selection) {
-        '1' { Deploy-Vercel }
+        '1' { Start-Deployment }
         '2' { Run-DevMode }
         '3' { Install-Dependencies }
         '4' { Analyze-Debug }

@@ -1,43 +1,20 @@
-import { createClient } from '@supabase/supabase-js'
-import { Database } from './types'
+import { createBrowserClient } from '@supabase/ssr'
+import type { Database } from './types'
+import Error from 'next/error'
 
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL')
-}
-if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY')
-}
-
-export const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      storageKey: 'supabase.auth.token',
-      storage: {
-        getItem: (key) => {
-          if (typeof window === 'undefined') {
-            return null;
-          }
-          return window.localStorage.getItem(key);
-        },
-        setItem: (key, value) => {
-          if (typeof window !== 'undefined') {
-            window.localStorage.setItem(key, value);
-          }
-        },
-        removeItem: (key) => {
-          if (typeof window !== 'undefined') {
-            window.localStorage.removeItem(key);
-          }
-        },
-      },
-    },
+export function createClient() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL')
   }
-)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY')
+  }
+
+  return createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  )
+}
 
 // Helper function to handle Supabase errors
 export function handleSupabaseError(error: Error) {
@@ -47,8 +24,9 @@ export function handleSupabaseError(error: Error) {
 
 // Helper function to check if user has admin role
 export async function isAdmin(userId: string) {
+  const client = createClient()
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('profiles')
       .select('role')
       .eq('id', userId)
@@ -64,8 +42,9 @@ export async function isAdmin(userId: string) {
 
 // Helper function to get user profile
 export async function getUserProfile(userId: string) {
+  const client = createClient()
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('profiles')
       .select('*')
       .eq('id', userId)
@@ -81,8 +60,9 @@ export async function getUserProfile(userId: string) {
 
 // Helper function to update user profile
 export async function updateUserProfile(userId: string, updates: Partial<Database['public']['Tables']['profiles']['Update']>) {
+  const client = createClient()
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('profiles')
       .update(updates)
       .eq('id', userId)

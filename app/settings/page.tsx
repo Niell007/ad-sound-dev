@@ -19,18 +19,18 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/custom-toast-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, User } from "lucide-react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from '@/lib/supabase/server'
 
 const formSchema = z.object({
   full_name: z.string().min(2, "Full name must be at least 2 characters"),
   avatar_url: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
 })
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
   const router = useRouter()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check, ArrowLeft, Music, Mic, Heart } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import React from "react"
 
 // This would typically come from a CMS or database
 const services = {
@@ -174,7 +173,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="space-y-4">
               <div className="inline-block rounded-lg bg-primary/10 p-2">
-                {React.createElement(service.icon, { className: "h-6 w-6 text-primary" })}
+                <service.icon className="h-6 w-6 text-primary" />
               </div>
               <h1 className="text-4xl font-bold">{service.title}</h1>
               <p className="text-xl text-muted-foreground">{service.description}</p>
@@ -191,7 +190,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
               </Button>
             </div>
             <div className="relative aspect-video rounded-xl overflow-hidden">
-              <Image src="/placeholder.svg?height=400&width=600" alt={service.title} fill className="object-cover" priority />
+              <Image src="/placeholder.svg?height=400&width=600" alt={service.title} fill className="object-cover" />
             </div>
           </div>
 
