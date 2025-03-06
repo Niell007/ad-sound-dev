@@ -3,9 +3,9 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Mic2, Music2, Tv2, Users2, Speaker, Star } from "lucide-react"
+import { Mic2, Music2, Tv2, Users2, Speaker, Star, Check, ArrowLeft, Mic } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const features = [
@@ -33,6 +33,21 @@ const features = [
     icon: <Speaker className="h-6 w-6" />,
     title: "Premium Sound",
     description: "Studio-quality audio processing for the perfect karaoke experience."
+  },
+  {
+    icon: <Check className="h-5 w-5 text-primary" />,
+    title: "Song Request System",
+    description: "Request your favorite songs and add them to the playlist."
+  },
+  {
+    icon: <Check className="h-5 w-5 text-primary" />,
+    title: "Voice Effects",
+    description: "Enhance your performance with a variety of voice effects."
+  },
+  {
+    icon: <Check className="h-5 w-5 text-primary" />,
+    title: "Recording Options",
+    description: "Capture your performance and share it with friends and family."
   }
 ]
 
@@ -67,205 +82,194 @@ const songCategories = [
 const packages = [
   {
     name: "Basic Package",
-    price: "R1200",
-    duration: "3 hours",
+    price: "R1500",
     features: [
-      "2x Wireless Microphones",
-      "HD Lyric Display",
-      "Basic Sound System",
-      "Standard Song Library",
-      "Setup & Teardown",
-    ]
+      "Up to 3 hours",
+      "2 wireless microphones",
+      "Standard song library",
+      "Basic sound system",
+    ],
   },
   {
     name: "Premium Package",
-    price: "R2000",
-    duration: "4 hours",
+    price: "R2500",
     features: [
-      "4x Wireless Microphones",
-      "Dual HD Displays",
-      "Premium Sound System",
-      "Full Song Library",
-      "Professional Host/MC",
-      "Basic Lighting Effects",
-      "Setup & Teardown",
-    ]
+      "Up to 5 hours",
+      "4 wireless microphones",
+      "Extended song library",
+      "Premium sound system",
+      "Professional host",
+      "Voice effects",
+      "Recording service",
+    ],
   },
   {
     name: "Party Package",
-    price: "R2800",
-    duration: "6 hours",
+    price: "R3500",
     features: [
-      "6x Wireless Microphones",
-      "Multiple HD Displays",
-      "Premium Sound System",
-      "Full Song Library",
-      "Professional Host/MC",
-      "Full Lighting Production",
-      "Backup Equipment",
-      "Setup & Teardown",
-    ]
-  }
+      "Up to 6 hours",
+      "6 wireless microphones",
+      "Complete song library",
+      "Premium sound system",
+      "Professional host",
+      "Voice effects",
+      "Recording service",
+      "Party lighting",
+      "Music videos",
+    ],
+  },
+]
+
+const gallery = [
+  "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2070",
+  "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=2070",
+  "https://images.unsplash.com/photo-1551710029-607e06bd45ff?q=80&w=2069",
 ]
 
 export default function KaraokePage() {
   return (
-    <div className="container py-12 space-y-16">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-[500px] rounded-3xl overflow-hidden">
+      <section className="relative h-[60vh] w-full">
         <Image
-          src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1000"
+          src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2070"
           alt="Karaoke Setup"
           fill
-          className="object-cover"
+          className="object-cover brightness-50"
+          priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
-          <div className="container">
-            <motion.div
-              className="max-w-2xl space-y-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-4xl font-bold gradient-text">Karaoke Experience</h1>
-              <p className="text-xl text-muted-foreground">
-                Create unforgettable memories with our professional karaoke setup.
-                Perfect for parties, corporate events, and social gatherings.
-              </p>
-              <div className="flex gap-4">
-                <Button size="lg" className="button-glow" asChild>
-                  <Link href="/contact">Book Now</Link>
-                </Button>
-                <Button size="lg" variant="outline">
-                  View Song List
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {features.map((feature, index) => (
-          <motion.div
-            key={feature.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+          <h1 className="text-4xl md:text-6xl font-bold text-center mb-4">
+            Karaoke Services
+          </h1>
+          <p className="text-lg md:text-xl text-center max-w-2xl mx-4">
+            Professional karaoke equipment and entertainment for your event
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="mt-8"
           >
-            <Card className="h-full card-hover">
-              <CardContent className="pt-6">
-                <div className="rounded-full w-12 h-12 flex items-center justify-center bg-primary/10 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Song Categories */}
-      <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Extensive Song Library</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our comprehensive song collection features hits from every genre and era.
-            Regular updates ensure you always have access to the latest releases.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {songCategories.map((category, index) => (
-            <motion.div
-              key={category.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-            >
-              <Card className="h-full card-hover">
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
-                  <p className="text-muted-foreground mb-4">{category.description}</p>
-                  <ul className="space-y-2">
-                    {category.examples.map((song) => (
-                      <li key={song} className="flex items-center gap-2 text-sm">
-                        <Star className="h-3 w-3 text-primary" />
-                        {song}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+            <Link href="/contact">Get Started</Link>
+          </Button>
         </div>
       </section>
 
-      {/* Packages Section */}
-      <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Choose Your Package</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Select the perfect package for your event. All packages include professional
-            equipment and support throughout your event.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg, index) => (
-            <motion.div
-              key={pkg.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
-            >
-              <Card className="h-full card-hover gradient-border">
-                <CardContent className="pt-6">
-                  <h3 className="text-2xl font-bold mb-2">{pkg.name}</h3>
-                  <div className="flex items-baseline gap-1 mb-4">
-                    <span className="text-4xl font-bold">{pkg.price}</span>
-                    <span className="text-muted-foreground">/ {pkg.duration}</span>
+      <div className="container py-12 space-y-16">
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href="/services" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+
+        {/* Main Content */}
+        <div className="grid gap-12">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+            <div className="space-y-4">
+              <div className="inline-block rounded-lg bg-primary/10 p-2">
+                <Mic className="h-6 w-6 text-primary" />
+              </div>
+              <h2 className="text-3xl font-bold">Premium Karaoke Experience</h2>
+              <p className="text-xl text-muted-foreground">
+                Create unforgettable memories with our professional karaoke setup and extensive song library.
+              </p>
+              <div className="space-y-2">
+                {features.slice(0, 4).map((feature) => (
+                  <div key={feature.title} className="flex items-center gap-2">
+                    <Check className="h-5 w-5 text-primary" />
+                    <span>{feature.title}</span>
                   </div>
-                  <ul className="space-y-2 mb-6">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm">
-                        <Star className="h-4 w-4 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full button-glow" asChild>
-                    <Link href="/contact">Book This Package</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+                ))}
+              </div>
+              <Button asChild>
+                <Link href="/contact">Book Now</Link>
+              </Button>
+            </div>
+            <div className="relative aspect-video rounded-xl overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=2070"
+                alt="Karaoke Setup"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
 
-      {/* CTA Section */}
-      <motion.section
-        className="text-center space-y-6 py-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
-      >
-        <h2 className="text-3xl font-bold">Ready to Start the Party?</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Book your karaoke experience today and create lasting memories with friends and family.
-          We'll handle all the technical details while you focus on having fun!
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button size="lg" className="button-glow" asChild>
-            <Link href="/contact">Book Now</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="tel:0815436748">Call Us</Link>
-          </Button>
+          {/* Pricing Packages */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Karaoke Packages</h2>
+            <div className="grid gap-8 lg:grid-cols-3">
+              {packages.map((package_, index) => (
+                <Card key={index} className="relative overflow-hidden">
+                  <CardHeader>
+                    <CardTitle>{package_.name}</CardTitle>
+                    <p className="text-3xl font-bold text-primary">
+                      {package_.price}
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {package_.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Event Gallery</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {gallery.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-video rounded-lg overflow-hidden group"
+                >
+                  <Image
+                    src={image}
+                    alt={`Karaoke Event Gallery Image ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <section className="bg-primary text-primary-foreground rounded-2xl p-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to Host a Karaoke Party?</h2>
+            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+              Let us help you create an entertaining and memorable karaoke experience
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90"
+                asChild
+              >
+                <Link href="/contact">Get in Touch</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white/10"
+                asChild
+              >
+                <Link href="/services">View All Services</Link>
+              </Button>
+            </div>
+          </section>
         </div>
-      </motion.section>
+      </div>
     </div>
   )
 } 

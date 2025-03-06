@@ -3,277 +3,276 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Heart, Music, Mic2, Clock, Users, Star, Bell } from "lucide-react"
+import { Heart, Music, Mic2, Clock, Users, Star, Bell, Sparkles, Check, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const features = [
   {
     icon: <Music className="h-6 w-6" />,
-    title: "Ceremony Music",
-    description: "Professional sound setup for your wedding ceremony, including processional and recessional music."
+    title: "Ceremony Sound",
+    description: "Crystal-clear audio for your vows, readings, and live music"
   },
   {
-    icon: <Mic2 className="h-6 w-6" />,
+    icon: <Heart className="h-6 w-6" />,
     title: "Reception Entertainment",
-    description: "High-quality sound system for speeches, background music, and dancing."
+    description: "Professional DJ services and dance floor sound"
   },
   {
-    icon: <Bell className="h-6 w-6" />,
-    title: "Custom Playlists",
-    description: "Personalized music selection for every moment of your special day."
+    icon: <Sparkles className="h-6 w-6" />,
+    title: "Ambient Lighting",
+    description: "Elegant lighting solutions to enhance your venue"
   },
   {
     icon: <Clock className="h-6 w-6" />,
     title: "Full Day Coverage",
-    description: "Seamless audio coverage from ceremony to reception and everything in between."
-  },
-  {
-    icon: <Users className="h-6 w-6" />,
-    title: "Professional Team",
-    description: "Experienced sound technicians to ensure everything runs smoothly."
+    description: "Seamless audio from ceremony to last dance"
   }
 ]
 
 const packages = [
   {
     name: "Ceremony Package",
-    price: "R2500",
-    description: "Perfect for intimate ceremonies",
+    price: "R4,500",
     features: [
-      "2x Professional Speakers",
-      "2x Wireless Microphones",
-      "Ceremony Music Playlist",
-      "Sound Technician",
-      "Early Setup & Sound Check",
-      "Backup Equipment",
-    ]
+      "Up to 2 hours coverage",
+      "Professional sound system",
+      "2 wireless microphones",
+      "Ceremony music playlist",
+      "Backup equipment",
+      "Early setup & sound check",
+    ],
   },
   {
     name: "Reception Package",
-    price: "R3500",
-    description: "Ideal for wedding receptions",
+    price: "R8,500",
     features: [
-      "4x Professional Speakers",
-      "2x Subwoofers",
-      "4x Wireless Microphones",
-      "DJ Services (4 hours)",
-      "Dance Floor Lighting",
-      "Custom Music Selection",
-      "Sound Technician",
-      "Setup & Teardown",
-    ]
+      "Up to 6 hours coverage",
+      "Premium sound system",
+      "Professional DJ",
+      "Dance floor lighting",
+      "Wireless microphones",
+      "Custom playlist creation",
+      "MC system",
+      "Setup & teardown",
+    ],
   },
   {
     name: "Complete Wedding Package",
-    price: "R5500",
-    description: "Full coverage for your special day",
+    price: "R12,500",
     features: [
-      "Complete Ceremony Setup",
-      "Full Reception System",
-      "6x Professional Speakers",
-      "4x Subwoofers",
-      "6x Wireless Microphones",
-      "DJ Services (6 hours)",
-      "Premium Lighting Package",
-      "Custom Music Planning",
-      "2x Sound Technicians",
-      "Backup Equipment",
-      "Early Setup & Sound Check",
+      "Full day coverage",
+      "Premium sound for ceremony & reception",
+      "Professional DJ services",
+      "Comprehensive lighting package",
+      "Multiple wireless microphones",
+      "Custom music planning",
+      "Dedicated sound engineer",
+      "Backup equipment",
+      "Early setup & sound check",
+      "Late night finish option",
+    ],
+  },
+]
+
+const eventSpaces = [
+  {
+    title: "Ceremony",
+    items: [
+      "Outdoor garden ceremonies",
+      "Indoor chapel services",
+      "Beach weddings",
+      "Large cathedral spaces",
+    ]
+  },
+  {
+    title: "Reception",
+    items: [
+      "Banquet halls",
+      "Outdoor marquees",
+      "Hotel ballrooms",
+      "Restaurant venues",
+    ]
+  },
+  {
+    title: "Special Moments",
+    items: [
+      "First dance",
+      "Parent dances",
+      "Toasts & speeches",
+      "Grand entrance",
     ]
   }
 ]
 
-const timeline = [
-  {
-    time: "Pre-Ceremony",
-    description: "Ambient music as guests arrive and are seated",
-    examples: ["Canon in D - Pachelbel", "Air on G String - Bach"]
-  },
-  {
-    time: "Ceremony",
-    description: "Traditional or modern processional and ceremony music",
-    examples: ["Wedding March - Mendelssohn", "A Thousand Years - Christina Perri"]
-  },
-  {
-    time: "Post-Ceremony",
-    description: "Uplifting recessional music and photo session background",
-    examples: ["All You Need Is Love - The Beatles", "Signed, Sealed, Delivered - Stevie Wonder"]
-  },
-  {
-    time: "Reception Entrance",
-    description: "High-energy introduction of the wedding party",
-    examples: ["Can't Stop the Feeling - Justin Timberlake", "Celebration - Kool & The Gang"]
-  },
-  {
-    time: "Dinner",
-    description: "Soft background music during dining",
-    examples: ["Jazz Standards", "Contemporary Acoustic Covers"]
-  },
-  {
-    time: "Dancing",
-    description: "Mix of classics and current hits to keep the dance floor full",
-    examples: ["Mix of Top 40, Classic Rock, and Guest Requests"]
-  }
+const gallery = [
+  "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070",
+  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069",
+  "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2070",
 ]
 
 export default function WeddingSoundPage() {
   return (
-    <div className="container py-12 space-y-16">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-[500px] rounded-3xl overflow-hidden">
+      <section className="relative h-[60vh] w-full">
         <Image
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1000"
-          alt="Wedding Ceremony"
+          src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070"
+          alt="Wedding Venue"
           fill
-          className="object-cover"
+          className="object-cover brightness-50"
+          priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
-          <div className="container">
-            <motion.div
-              className="max-w-2xl space-y-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-4xl font-bold gradient-text">Wedding Sound Solutions</h1>
-              <p className="text-xl text-muted-foreground">
-                Professional audio services for your perfect day. From intimate ceremonies
-                to grand receptions, we ensure every moment sounds beautiful.
-              </p>
-              <div className="flex gap-4">
-                <Button size="lg" className="button-glow" asChild>
-                  <Link href="/contact">Book Consultation</Link>
-                </Button>
-                <Button size="lg" variant="outline">
-                  View Packages
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {features.map((feature, index) => (
-          <motion.div
-            key={feature.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+          <h1 className="text-4xl md:text-6xl font-bold text-center mb-4">
+            Wedding Sound Services
+          </h1>
+          <p className="text-lg md:text-xl text-center max-w-2xl mx-4">
+            Creating the perfect soundtrack for your special day
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="mt-8"
           >
-            <Card className="h-full card-hover">
-              <CardContent className="pt-6">
-                <div className="rounded-full w-12 h-12 flex items-center justify-center bg-primary/10 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Packages Section */}
-      <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Wedding Packages</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Choose from our carefully curated packages or let us create a custom solution
-            for your special day.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg, index) => (
-            <motion.div
-              key={pkg.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-            >
-              <Card className="h-full card-hover gradient-border">
-                <CardContent className="pt-6">
-                  <h3 className="text-2xl font-bold mb-2">{pkg.name}</h3>
-                  <p className="text-muted-foreground mb-4">{pkg.description}</p>
-                  <div className="text-4xl font-bold mb-6">{pkg.price}</div>
-                  <ul className="space-y-2 mb-6">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm">
-                        <Heart className="h-4 w-4 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full button-glow" asChild>
-                    <Link href="/contact">Book Consultation</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+            <Link href="/contact">Plan Your Wedding</Link>
+          </Button>
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Wedding Day Timeline</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We coordinate every musical moment of your special day, ensuring a perfect
-            flow from start to finish.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {timeline.map((item, index) => (
-            <motion.div
-              key={item.time}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
-            >
-              <Card className="h-full card-hover">
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">{item.time}</h3>
-                  <p className="text-muted-foreground mb-4">{item.description}</p>
-                  <div className="space-y-2">
-                    {item.examples.map((example) => (
-                      <p key={example} className="text-sm flex items-center gap-2">
-                        <Star className="h-3 w-3 text-primary" />
-                        {example}
-                      </p>
-                    ))}
+      <div className="container py-12 space-y-16">
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href="/services" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+
+        {/* Main Content */}
+        <div className="grid gap-12">
+          {/* Features Grid */}
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature) => (
+              <Card key={feature.title} className="bg-card">
+                <CardHeader>
+                  <div className="rounded-lg bg-primary/10 p-2 w-fit">
+                    {feature.icon}
                   </div>
+                  <CardTitle className="mt-4">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
 
-      {/* CTA Section */}
-      <motion.section
-        className="text-center space-y-6 py-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
-      >
-        <h2 className="text-3xl font-bold">Let's Plan Your Perfect Day</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Schedule a consultation to discuss your wedding vision and how we can help
-          create the perfect soundtrack for your special day.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button size="lg" className="button-glow" asChild>
-            <Link href="/contact">Book Consultation</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="tel:0815436748">Call Us</Link>
-          </Button>
+          {/* Event Spaces */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Versatile Solutions for Every Venue</h2>
+            <Tabs defaultValue="ceremony" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                {eventSpaces.map((space) => (
+                  <TabsTrigger key={space.title} value={space.title.toLowerCase()}>
+                    {space.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {eventSpaces.map((space) => (
+                <TabsContent key={space.title} value={space.title.toLowerCase()}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{space.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-4">
+                      {space.items.map((item) => (
+                        <div key={item} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+
+          {/* Pricing Packages */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Wedding Packages</h2>
+            <div className="grid gap-8 lg:grid-cols-3">
+              {packages.map((package_, index) => (
+                <Card key={index} className="relative overflow-hidden">
+                  <CardHeader>
+                    <CardTitle>{package_.name}</CardTitle>
+                    <p className="text-3xl font-bold text-primary">
+                      {package_.price}
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {package_.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Wedding Gallery</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {gallery.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-video rounded-lg overflow-hidden group"
+                >
+                  <Image
+                    src={image}
+                    alt={`Wedding Event Gallery Image ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <section className="bg-primary text-primary-foreground rounded-2xl p-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to Plan Your Wedding Sound?</h2>
+            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+              Let us help you create the perfect atmosphere for your special day
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90"
+                asChild
+              >
+                <Link href="/contact">Schedule Consultation</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white/10"
+                asChild
+              >
+                <Link href="/services">View All Services</Link>
+              </Button>
+            </div>
+          </section>
         </div>
-      </motion.section>
+      </div>
     </div>
   )
 } 

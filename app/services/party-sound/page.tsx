@@ -3,235 +3,209 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Music, Check, Volume2, Lightbulb, Clock, Users } from "lucide-react"
+import { Music, Check, Volume2, Lightbulb, Clock, Users, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const features = [
-  {
-    icon: <Music className="h-6 w-6" />,
-    title: "Customized Playlists",
-    description: "Tailored music selection to match your event's theme and audience preferences."
-  },
-  {
-    icon: <Volume2 className="h-6 w-6" />,
-    title: "Premium Sound System",
-    description: "High-quality speakers and audio equipment for crystal clear sound."
-  },
-  {
-    icon: <Lightbulb className="h-6 w-6" />,
-    title: "Lighting Effects",
-    description: "Professional lighting setup to enhance the party atmosphere."
-  },
-  {
-    icon: <Clock className="h-6 w-6" />,
-    title: "Flexible Duration",
-    description: "Available for events of any duration, from a few hours to all-night parties."
-  },
-  {
-    icon: <Users className="h-6 w-6" />,
-    title: "Experienced Team",
-    description: "Professional sound technicians and optional DJ services."
-  }
+  "High-quality sound systems",
+  "Customized playlists",
+  "Professional DJ services",
+  "Lighting equipment",
+  "Setup and teardown included",
+  "Backup equipment",
+  "Technical support throughout the event",
+  "Sound level monitoring",
 ]
 
 const packages = [
   {
     name: "Basic Package",
-    price: "R1500",
-    duration: "4 hours",
+    price: "R2000",
     features: [
-      "2x 15\" Powered Speakers",
-      "1x Wireless Microphone",
-      "Basic Lighting Setup",
-      "Standard Music Library",
-      "Setup & Teardown",
-    ]
+      "Up to 4 hours",
+      "Basic sound system",
+      "1 wireless microphone",
+      "Standard lighting",
+    ],
   },
   {
     name: "Premium Package",
-    price: "R2500",
-    duration: "6 hours",
+    price: "R3500",
     features: [
-      "4x 15\" Powered Speakers",
-      "2x Subwoofers",
-      "2x Wireless Microphones",
-      "Advanced Lighting System",
-      "Premium Music Library",
-      "Professional DJ",
-      "Setup & Teardown",
-    ]
+      "Up to 6 hours",
+      "Premium sound system",
+      "2 wireless microphones",
+      "Professional lighting",
+      "DJ services",
+    ],
   },
   {
     name: "Ultimate Package",
-    price: "R3500",
-    duration: "8 hours",
+    price: "R5000",
     features: [
-      "6x 15\" Powered Speakers",
-      "4x Subwoofers",
-      "4x Wireless Microphones",
-      "Full Lighting Production",
-      "Premium Music Library",
-      "Professional DJ",
-      "Backup Equipment",
-      "Setup & Teardown",
-    ]
-  }
+      "Up to 8 hours",
+      "Premium sound system",
+      "4 wireless microphones",
+      "Professional lighting",
+      "DJ services",
+      "Fog machine",
+      "LED dance floor",
+    ],
+  },
 ]
 
 const gallery = [
-  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000",
+  "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
+  "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070",
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070",
 ]
 
 export default function PartySoundPage() {
   return (
-    <div className="container py-12 space-y-16">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-[500px] rounded-3xl overflow-hidden">
+      <section className="relative h-[60vh] w-full">
         <Image
-          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1000"
+          src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070"
           alt="Party Sound System"
           fill
-          className="object-cover"
+          className="object-cover brightness-50"
+          priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/50 flex items-center">
-          <div className="container">
-            <motion.div
-              className="max-w-2xl space-y-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-4xl font-bold gradient-text">Party Sound Solutions</h1>
-              <p className="text-xl text-muted-foreground">
-                Transform your event with our professional sound systems and expert audio services.
-                Perfect for parties, corporate events, and celebrations of any size.
-              </p>
-              <div className="flex gap-4">
-                <Button size="lg" className="button-glow" asChild>
-                  <Link href="/contact">Book Now</Link>
-                </Button>
-                <Button size="lg" variant="outline">
-                  View Packages
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {features.map((feature, index) => (
-          <motion.div
-            key={feature.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <Card className="h-full card-hover">
-              <CardContent className="pt-6">
-                <div className="rounded-full w-12 h-12 flex items-center justify-center bg-primary/10 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Packages Section */}
-      <section className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Choose Your Package</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We offer flexible packages to suit events of any size. All packages include setup,
-            operation, and teardown services.
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+          <h1 className="text-4xl md:text-6xl font-bold text-center mb-4">
+            Party Sound Services
+          </h1>
+          <p className="text-lg md:text-xl text-center max-w-2xl mx-4">
+            Professional sound solutions for parties and events of all sizes
           </p>
+          <Button
+            asChild
+            size="lg"
+            className="mt-8"
+          >
+            <Link href="/contact">Get Started</Link>
+          </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg, index) => (
-            <motion.div
-              key={pkg.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-            >
-              <Card className="h-full card-hover gradient-border">
-                <CardContent className="pt-6">
-                  <h3 className="text-2xl font-bold mb-2">{pkg.name}</h3>
-                  <div className="flex items-baseline gap-1 mb-4">
-                    <span className="text-4xl font-bold">{pkg.price}</span>
-                    <span className="text-muted-foreground">/ {pkg.duration}</span>
+      </section>
+
+      <div className="container py-12 space-y-16">
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href="/services" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+
+        {/* Main Content */}
+        <div className="grid gap-12">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+            <div className="space-y-4">
+              <div className="inline-block rounded-lg bg-primary/10 p-2">
+                <Music className="h-6 w-6 text-primary" />
+              </div>
+              <h2 className="text-3xl font-bold">Premium Sound Solutions</h2>
+              <p className="text-xl text-muted-foreground">
+                Create the perfect atmosphere for your party with our professional sound equipment and services.
+              </p>
+              <div className="space-y-2">
+                {features.slice(0, 4).map((feature) => (
+                  <div key={feature} className="flex items-center gap-2">
+                    <Check className="h-5 w-5 text-primary" />
+                    <span>{feature}</span>
                   </div>
-                  <ul className="space-y-2 mb-6">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm">
-                        <Check className="h-4 w-4 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full button-glow" asChild>
-                    <Link href="/contact">Book This Package</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section className="space-y-8">
-        <h2 className="text-3xl font-bold text-center">Event Gallery</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {gallery.map((image, index) => (
-            <motion.div
-              key={index}
-              className="relative aspect-square rounded-lg overflow-hidden"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 + 1 }}
-            >
+                ))}
+              </div>
+              <Button asChild>
+                <Link href="/contact">Book Now</Link>
+              </Button>
+            </div>
+            <div className="relative aspect-video rounded-xl overflow-hidden">
               <Image
-                src={image}
-                alt={`Event ${index + 1}`}
+                src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070"
+                alt="Sound Equipment Setup"
                 fill
-                className="object-cover image-zoom"
+                className="object-cover"
               />
-            </motion.div>
-          ))}
-        </div>
-      </section>
+            </div>
+          </div>
 
-      {/* CTA Section */}
-      <motion.section
-        className="text-center space-y-6 py-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
-      >
-        <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Contact us today to discuss your event requirements and get a personalized quote.
-          We're here to make your event unforgettable!
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button size="lg" className="button-glow" asChild>
-            <Link href="/contact">Book Now</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="tel:0815436748">Call Us</Link>
-          </Button>
+          {/* Pricing Packages */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Sound Packages</h2>
+            <div className="grid gap-8 lg:grid-cols-3">
+              {packages.map((package_, index) => (
+                <Card key={index} className="relative overflow-hidden">
+                  <CardHeader>
+                    <CardTitle>{package_.name}</CardTitle>
+                    <p className="text-3xl font-bold text-primary">
+                      {package_.price}
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {package_.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery */}
+          <div>
+            <h2 className="text-3xl font-bold text-center mb-8">Event Gallery</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {gallery.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-video rounded-lg overflow-hidden group"
+                >
+                  <Image
+                    src={image}
+                    alt={`Party Sound Gallery Image ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <section className="bg-primary text-primary-foreground rounded-2xl p-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to Make Your Party Unforgettable?</h2>
+            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+              Let our professional team handle the sound and create the perfect atmosphere for your event
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90"
+                asChild
+              >
+                <Link href="/contact">Get in Touch</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white/10"
+                asChild
+              >
+                <Link href="/services">View All Services</Link>
+              </Button>
+            </div>
+          </section>
         </div>
-      </motion.section>
+      </div>
     </div>
   )
 } 
