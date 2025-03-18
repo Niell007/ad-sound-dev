@@ -1,16 +1,18 @@
-import { createClient } from '@/lib/supabase/client';
-import type { PostgrestError } from '@supabase/supabase-js';
-import type { Database } from './types';
+import { createClient } from "@/lib/supabase/client";
+import type { PostgrestError } from "@supabase/supabase-js";
+import type { Database } from "./types";
 
-export type Review = Database['public']['Tables']['reviews']['Row'];
-export type ReviewInsert = Database['public']['Tables']['reviews']['Insert'];
-export type ReviewUpdate = Database['public']['Tables']['reviews']['Update'];
-export type ReviewReaction = Database['public']['Tables']['review_reactions']['Row'];
-export type ReviewReactionInsert = Database['public']['Tables']['review_reactions']['Insert'];
+export type Review = Database["public"]["Tables"]["reviews"]["Row"];
+export type ReviewInsert = Database["public"]["Tables"]["reviews"]["Insert"];
+export type ReviewUpdate = Database["public"]["Tables"]["reviews"]["Update"];
+export type ReviewReaction =
+  Database["public"]["Tables"]["review_reactions"]["Row"];
+export type ReviewReactionInsert =
+  Database["public"]["Tables"]["review_reactions"]["Insert"];
 
 // Custom error handler for Supabase errors
 function handleDatabaseError(error: PostgrestError) {
-  console.error('Database error:', error);
+  console.error("Database error:", error);
   return new Error(error.message);
 }
 
@@ -18,14 +20,14 @@ function handleDatabaseError(error: PostgrestError) {
  * Fetch all reviews with optional filtering
  */
 export async function getReviews({
-  status = 'approved',
+  status = "approved",
   featured,
   limit = 10,
   offset = 0,
-  orderBy = 'created_at',
+  orderBy = "created_at",
   ascending = false,
 }: {
-  status?: 'pending' | 'approved' | 'rejected' | string;
+  status?: "pending" | "approved" | "rejected" | string;
   featured?: boolean;
   limit?: number;
   offset?: number;
@@ -34,15 +36,15 @@ export async function getReviews({
 } = {}) {
   try {
     let query = createClient()
-      .from('reviews')
-      .select('*');
+      .from("reviews")
+      .select("*");
 
     if (status) {
-      query = query.eq('status', status);
+      query = query.eq("status", status);
     }
 
     if (featured !== undefined) {
-      query = query.eq('featured', featured);
+      query = query.eq("featured", featured);
     }
 
     query = query.order(orderBy, { ascending });
@@ -57,7 +59,7 @@ export async function getReviews({
 
     return data as Review[];
   } catch (error) {
-    console.error('Error getting reviews:', error);
+    console.error("Error getting reviews:", error);
     throw error;
   }
 }
@@ -68,9 +70,9 @@ export async function getReviews({
 export async function getReviewById(id: string) {
   try {
     const { data, error } = await createClient()
-      .from('reviews')
-      .select('*')
-      .eq('id', id)
+      .from("reviews")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
@@ -90,7 +92,7 @@ export async function getReviewById(id: string) {
 export async function createReview(review: ReviewInsert) {
   try {
     const { data, error } = await createClient()
-      .from('reviews')
+      .from("reviews")
       .insert(review)
       .select()
       .single();
@@ -101,7 +103,7 @@ export async function createReview(review: ReviewInsert) {
 
     return data;
   } catch (error) {
-    console.error('Error creating review:', error);
+    console.error("Error creating review:", error);
     throw error;
   }
 }
@@ -112,9 +114,9 @@ export async function createReview(review: ReviewInsert) {
 export async function updateReview(id: string, updates: ReviewUpdate) {
   try {
     const { data, error } = await createClient()
-      .from('reviews')
+      .from("reviews")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -135,9 +137,9 @@ export async function updateReview(id: string, updates: ReviewUpdate) {
 export async function deleteReview(id: string) {
   try {
     const { error } = await createClient()
-      .from('reviews')
+      .from("reviews")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       throw handleDatabaseError(error);
@@ -154,14 +156,14 @@ export async function deleteReview(id: string) {
  * Approve a review
  */
 export async function approveReview(id: string) {
-  return updateReview(id, { status: 'approved' });
+  return updateReview(id, { status: "approved" });
 }
 
 /**
  * Reject a review
  */
 export async function rejectReview(id: string) {
-  return updateReview(id, { status: 'rejected' });
+  return updateReview(id, { status: "rejected" });
 }
 
 /**
@@ -177,7 +179,7 @@ export async function toggleFeatureReview(id: string, featured: boolean) {
 export async function respondToReview(id: string, response: string) {
   return updateReview(id, {
     response,
-    response_date: new Date().toISOString()
+    response_date: new Date().toISOString(),
   });
 }
 
@@ -187,24 +189,28 @@ export async function respondToReview(id: string, response: string) {
 export async function getReviewReactions(reviewId: string) {
   try {
     const { data, error } = await createClient()
-      .from('review_reactions')
-      .select('*')
-      .eq('review_id', reviewId);
+      .from("review_reactions")
+      .select("*")
+      .eq("review_id", reviewId);
 
     if (error) {
       throw handleDatabaseError(error);
     }
 
-    const helpfulCount = data.filter((r: ReviewReaction) => r.reaction_type === 'helpful').length;
-    const notHelpfulCount = data.filter((r: ReviewReaction) => r.reaction_type === 'not_helpful').length;
+    const helpfulCount = data.filter((r: ReviewReaction) =>
+      r.reaction_type === "helpful"
+    ).length;
+    const notHelpfulCount = data.filter((r: ReviewReaction) =>
+      r.reaction_type === "not_helpful"
+    ).length;
 
     return {
       reactions: data,
       counts: {
         helpful: helpfulCount,
         not_helpful: notHelpfulCount,
-        total: data.length
-      }
+        total: data.length,
+      },
     };
   } catch (error) {
     console.error(`Error getting reactions for review ${reviewId}:`, error);
@@ -218,7 +224,7 @@ export async function getReviewReactions(reviewId: string) {
 export async function addReviewReaction(reaction: ReviewReactionInsert) {
   try {
     const { data, error } = await createClient()
-      .from('review_reactions')
+      .from("review_reactions")
       .insert(reaction)
       .select()
       .single();
@@ -229,7 +235,7 @@ export async function addReviewReaction(reaction: ReviewReactionInsert) {
 
     return data;
   } catch (error) {
-    console.error('Error adding review reaction:', error);
+    console.error("Error adding review reaction:", error);
     throw error;
   }
 }
@@ -240,9 +246,9 @@ export async function addReviewReaction(reaction: ReviewReactionInsert) {
 export async function removeReviewReaction(id: string) {
   try {
     const { error } = await createClient()
-      .from('review_reactions')
+      .from("review_reactions")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       throw handleDatabaseError(error);
@@ -260,11 +266,11 @@ export async function removeReviewReaction(id: string) {
  */
 export async function getFeaturedReviews(limit = 6) {
   return getReviews({
-    status: 'approved',
+    status: "approved",
     featured: true,
     limit,
-    orderBy: 'created_at',
-    ascending: false
+    orderBy: "created_at",
+    ascending: false,
   });
 }
 
@@ -273,10 +279,10 @@ export async function getFeaturedReviews(limit = 6) {
  */
 export async function getRecentReviews(limit = 10) {
   return getReviews({
-    status: 'approved',
+    status: "approved",
     limit,
-    orderBy: 'created_at',
-    ascending: false
+    orderBy: "created_at",
+    ascending: false,
   });
 }
 
@@ -285,9 +291,9 @@ export async function getRecentReviews(limit = 10) {
  */
 export async function getAverageRating() {
   const { data, error } = await createClient()
-    .from('reviews')
-    .select('rating')
-    .eq('status', 'approved');
+    .from("reviews")
+    .select("rating")
+    .eq("status", "approved");
 
   if (error) {
     throw handleDatabaseError(error);
@@ -297,7 +303,10 @@ export async function getAverageRating() {
     return 0;
   }
 
-  const sum = data.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0);
+  const sum = data.reduce(
+    (acc: number, review: { rating: number }) => acc + review.rating,
+    0,
+  );
   return sum / data.length;
 }
 
@@ -306,9 +315,9 @@ export async function getAverageRating() {
  */
 export async function getRatingDistribution() {
   const { data, error } = await createClient()
-    .from('reviews')
-    .select('rating')
-    .eq('status', 'approved');
+    .from("reviews")
+    .select("rating")
+    .eq("status", "approved");
 
   if (error) {
     throw handleDatabaseError(error);
@@ -319,7 +328,7 @@ export async function getRatingDistribution() {
     2: 0,
     3: 0,
     4: 0,
-    5: 0
+    5: 0,
   };
 
   data?.forEach((review: { rating: 1 | 2 | 3 | 4 | 5 }) => {
@@ -329,4 +338,4 @@ export async function getRatingDistribution() {
   });
 
   return distribution;
-} 
+}

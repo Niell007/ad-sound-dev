@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "sourceMap": true,
+        "inlineSourceMap": false,
+        "inlineSources": true,
+        "sourceRoot": "/",
+        "mapRoot": null
+    },
+    "exclude": [
+        "node_modules",
+        ".next",
+        "out"
+    ]
+}

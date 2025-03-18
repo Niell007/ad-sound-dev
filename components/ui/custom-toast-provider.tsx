@@ -12,18 +12,28 @@ type ToastContextType = {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export function CustomToastProvider({ children }: { children: React.ReactNode }) {
+export function CustomToastProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [toasts, setToasts] = React.useState<ToastProps[]>([]);
 
   const toast = React.useCallback(
     (props: ToastProps) => {
       const id = Math.random().toString(36).substring(2, 9);
-      setToasts((prevToasts) => [...prevToasts, { id, ...props }]);
+      const variant = props.variant || "default";
+      setToasts((prevToasts) => [...prevToasts, { id, variant, ...props }]);
 
       // Auto dismiss after 5 seconds
-      setTimeout(() => {
-        setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-      }, 5000);
+      setTimeout(
+        () => {
+          setToasts((prevToasts) =>
+            prevToasts.filter((toast) => toast.id !== id)
+          );
+        },
+        props.variant === "custom" ? 7000 : 5000
+      ); // Custom toasts stay longer
 
       return id;
     },
@@ -33,7 +43,9 @@ export function CustomToastProvider({ children }: { children: React.ReactNode })
   const dismiss = React.useCallback(
     (toastId?: string) => {
       if (toastId) {
-        setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== toastId));
+        setToasts((prevToasts) =>
+          prevToasts.filter((toast) => toast.id !== toastId)
+        );
       } else {
         setToasts([]);
       }
@@ -54,4 +66,4 @@ export function useToast() {
     throw new Error("useToast must be used within a CustomToastProvider");
   }
   return context;
-} 
+}
